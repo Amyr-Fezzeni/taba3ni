@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/user_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,31 +16,46 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-  }
 
-  bool addressSelected = false;
+    if (context.read<UserProvider>().currentUser == null) return;
+    if (context.read<UserProvider>().currentUser?.location == null) return;
+
+    BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(),
+      "assets/person.png",
+    ).then((icon) {
+      _markers = {
+        Marker(
+            markerId: const MarkerId("sss"),
+            position: context.read<UserProvider>().currentUser!.location!,
+            infoWindow: const InfoWindow(
+        //popup info
+        title: 'Starting Point ',
+        snippet: 'Start Marker',
+      ),
+            icon: icon)
+      };
+      mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+          target: context.read<UserProvider>().currentUser!.location!,
+          zoom: 15,
+          tilt: 45)));
+      setState(() {
+        log("message");
+      });
+    });
+  }
 
   late GoogleMapController mapController;
-  late TextEditingController _controller;
-  CameraPosition position = const CameraPosition(
-    target: LatLng(47.56239938806303, 2.3078594729304314),
-    zoom: 6,
-  );
 
-  @override
-  void initState() {
-    super.initState();
+  Set<Marker> _markers = {};
 
-    _controller = TextEditingController(text: "");
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-Set<Marker> _markers = {};
   @override
   Widget build(BuildContext context) {
+    CameraPosition position = CameraPosition(
+      target: context.watch<UserProvider>().currentUser!.location!,
+      zoom: 6,
+    );
+
     return Scaffold(
         body: Container(
       child: GoogleMap(
@@ -48,7 +66,18 @@ Set<Marker> _markers = {};
           initialCameraPosition: position,
           onLongPress: (LatLng l) {
             setState(() {
-              _markers = {Marker(markerId: const MarkerId(""), position: l)};
+              BitmapDescriptor.fromAssetImage(
+                const ImageConfiguration(),
+                "assets/person.png",
+              ).then((icon) {
+                _markers = {
+                  Marker(
+                      markerId: const MarkerId("ss"),
+                      position:
+                          context.read<UserProvider>().currentUser!.location!,
+                      icon: icon)
+                };
+              });
               mapController.animateCamera(CameraUpdate.newCameraPosition(
                   CameraPosition(target: l, zoom: 15, tilt: 45)));
             });
