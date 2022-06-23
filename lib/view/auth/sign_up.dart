@@ -86,7 +86,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         )),
                         Padding(
                         padding: EdgeInsets.only(
-                            top: hm * 5, left: wm * 4, right: wm * 4),
+                            top: hm * 2.5, left: wm * 4, right: wm * 4),
                         child: textFormField(
                           hm,
                           wm,
@@ -95,7 +95,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           phoneController,
                           context,
                           lang,
-                          labelText: "Phome number",
+                          labelText: "Phone number",
                           label: true,
                         )),
                     Padding(
@@ -267,7 +267,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               : hint == "+216 54 879 235"
                   ? f2
               : hint == "user@gmail.com"
-                  ? f2
+                  ? f3
                   : f4,
           onFieldSubmitted: (val) {
             FocusScope.of(context)
@@ -326,6 +326,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             errorStyle:
                 text18white.copyWith(fontSize: tm * 1.8, color: Colors.red),
           ),
+          obscureText: hint == "ynYhs@XjfB1%"?true:false,
           validator: (val) {
             if (val != null) {
               if (hint == "Oliver Cydric") {
@@ -374,15 +375,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     });
                   });
                 }
-              } else if (hint == "Phone number") {
-                if (val.isNotEmpty) {
+              } else if (hint == "+216 54 879 235") {
+                 if (val.isEmpty) {
+                  return lang.translate("Please enter your password");
+                }else
                   if (!RegExp("^[\u0000-\u007F]+\$").hasMatch(val)) {
                     return lang.translate("Use Latin keyboard");
                   }
-                  if (!RegExp("^[0-9]").hasMatch(val)) {
+                  else if (!RegExp("^[0-9]").hasMatch(val)) {
                     return lang.translate("Only numbers are accepted");
-                  }
+                  } else {
+                  Future.delayed(Duration.zero, () {
+                    setState(() {
+                      phoneCorrect = true;
+                    });
+                  });
                 }
+              
               }
             }
           },

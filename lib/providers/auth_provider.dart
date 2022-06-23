@@ -52,57 +52,57 @@ class AuthProvider with ChangeNotifier {
   }
 
   signUpWithMail(BuildContext context, UserModel user) async {
-      isLoading = true;
-      notifyListeners();
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      try {
-        print("user.toJson(");
-         print(user.toJson());
-        final credential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: user.email,
-          password: user.password,
-        );
-        if (credential.user != null) {
-          await addMyUser(credential.user!,user);
-          prefs.setString("password", user.password);
-          prefs.setString("email", user.email);
-          isLoading = false;
-          notifyListeners();
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
-          );
-        } else {
-          isLoading = false;
-          notifyListeners();
-          popup(context, "Ok",
-              title: "Error",
-              description: "An error has occurred , Please try again");
-        }
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          isLoading = false;
-          notifyListeners();
-          popup(context, "Ok",
-              title: "Error",
-              description: 'The password provided is too weak.');
-        } else if (e.code == 'email-already-in-use') {
-          isLoading = false;
-          notifyListeners();
-          popup(context, "Ok",
-              title: "Error",
-              description: 'The password provided is too weak.');
-        }
-      } catch (e) {
+    isLoading = true;
+    notifyListeners();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      print("user.toJson(");
+      print(user.toJson());
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: user.email,
+        password: user.password,
+      );
+      if (credential.user != null) {
+        await addMyUser(credential.user!, user);
+        prefs.setString("password", user.password);
+        prefs.setString("email", user.email);
         isLoading = false;
         notifyListeners();
-        popup(context, "Ok", title: "Error", description: e.toString());
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      } else {
+        isLoading = false;
+        notifyListeners();
+        popup(context, "Ok",
+            title: "Error",
+            description: "An error has occurred , Please try again");
       }
-    
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      if (e.code == 'weak-password') {
+        isLoading = false;
+        notifyListeners();
+        popup(context, "Ok",
+            title: "Error", description: 'The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        isLoading = false;
+        notifyListeners();
+        popup(context, "Ok",
+            title: "Error", description: 'The password provided is too weak.');
+      }
+    } catch (e) {
+      isLoading = false;
+      notifyListeners();
+      print(e);
+      popup(context, "Ok", title: "Error", description: e.toString());
+    }
   }
- addMyUser(User? Guser,UserModel? user) async {
-    if (user != null && Guser!=null) {
+
+  addMyUser(User? Guser, UserModel? user) async {
+    if (user != null && Guser != null) {
       final docUser = FirebaseFirestore.instance.collection("users");
       final newUser = UserModel(
           id: Guser.uid,
@@ -110,19 +110,19 @@ class AuthProvider with ChangeNotifier {
           fullName: user.fullName,
           image: Guser.photoURL,
           phoneNumber: user.phoneNumber,
-          password: user.password
-          );
+          password: user.password);
       await docUser.doc(Guser.uid).set(newUser.toMap());
     }
   }
+
   addGoogleUser(User? user) async {
     if (user != null) {
       final docUser = FirebaseFirestore.instance.collection("users");
       final newUser = UserModel(
           id: user.uid,
-          email: user.email??"",
-          fullName: user.displayName??"",
-          phoneNumber: user.phoneNumber??"",
+          email: user.email ?? "",
+          fullName: user.displayName ?? "",
+          phoneNumber: user.phoneNumber ?? "",
           password: "",
           image: user.photoURL);
       await docUser.doc(user.uid).set(newUser.toMap());
@@ -151,5 +151,4 @@ class AuthProvider with ChangeNotifier {
       return false;
     }
   }
-
 }
