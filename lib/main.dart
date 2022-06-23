@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/firebase_options.dart';
+import 'package:taba3ni/providers/data_provider.dart';
+import 'package:taba3ni/providers/state_provider.dart';
 import 'package:taba3ni/providers/user_provider.dart';
-import 'package:taba3ni/views/home/home.dart';
+import 'package:taba3ni/views/page_structure.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +18,11 @@ void main() async {
   );
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => UserProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => DataProvider()),
+        ChangeNotifierProvider(create: (_) => StateProvider())
+      ],
       child: const MyApp(),
     ),
   );
@@ -33,7 +39,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),
+      home: const PageStructure(),
     );
   }
 }
