@@ -16,5 +16,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  LatLng? getcurrentPosition() => currentUser?.location;
+  
+
+
 }
