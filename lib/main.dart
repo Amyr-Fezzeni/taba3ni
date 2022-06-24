@@ -9,22 +9,32 @@ import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/firebase_options.dart';
 import 'package:taba3ni/providers/app_provider.dart';
 import 'package:taba3ni/providers/auth_provider.dart';
+import 'package:taba3ni/providers/data_provider.dart';
 import 'package:taba3ni/providers/language.dart';
+import 'package:taba3ni/providers/state_provider.dart';
+import 'package:taba3ni/providers/user_provider.dart';
 import 'package:taba3ni/view/welcome.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); 
+  WidgetsFlutterBinding.ensureInitialized();
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-    runApp(
-    MultiProvider(providers: [
-      ChangeNotifierProvider(create: (_) => ThemeNotifier()),
-      ChangeNotifierProvider(create: (_) => LanguageProvider()),
-      ChangeNotifierProvider(create: (_) => AuthProvider()),
-    ], child: const MyApp()),
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeNotifier()),
+        ChangeNotifierProvider(create: (_) => LanguageProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => DataProvider()),
+        ChangeNotifierProvider(create: (_) => StateProvider())
+      ],
+      child: const MyApp(),
+    ),
   );
 }
 
