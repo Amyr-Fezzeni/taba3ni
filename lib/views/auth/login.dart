@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/size_config.dart';
 import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/providers/language.dart';
-import 'package:taba3ni/view/auth/sign_up.dart';
+import 'package:taba3ni/views/auth/sign_up.dart';
 import 'package:taba3ni/widgets/primary_btn.dart';
 import 'package:taba3ni/widgets/text_widget.dart';
 import 'package:taba3ni/widgets/transparent_btn.dart';

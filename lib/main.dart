@@ -13,7 +13,7 @@ import 'package:taba3ni/providers/data_provider.dart';
 import 'package:taba3ni/providers/language.dart';
 import 'package:taba3ni/providers/state_provider.dart';
 import 'package:taba3ni/providers/user_provider.dart';
-import 'package:taba3ni/view/welcome.dart';
+import 'package:taba3ni/views/welcome.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

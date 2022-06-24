@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taba3ni/models/user.dart';
-import 'package:taba3ni/view/auth/login.dart';
+import 'package:taba3ni/views/auth/login.dart';
 import 'package:taba3ni/widgets/popup.dart';
 
 class AuthProvider with ChangeNotifier {
