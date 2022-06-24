@@ -18,6 +18,7 @@ class _PageStructureState extends State<PageStructure> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
     return Scaffold(
         body: SizedBox(
       child: Stack(
@@ -30,7 +31,9 @@ class _PageStructureState extends State<PageStructure> {
                 ProfileScreen(),
                 SettingsScreen()
               ][context.watch<StateProvider>().currentIndex]),
-          const CustomBottomNavigationBar()
+          MediaQuery.of(context).viewInsets.bottom == 0
+              ? const CustomBottomNavigationBar()
+              : const SizedBox()
         ],
       ),
     ));
