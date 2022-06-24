@@ -4,7 +4,7 @@ import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/providers/language.dart';
 import 'package:taba3ni/widgets/text_widget.dart';
 
-class textField extends StatefulWidget {
+class TextField extends StatefulWidget {
   final double tm;
   final double wm;
   final double hm;
@@ -12,7 +12,7 @@ class textField extends StatefulWidget {
   final String? labeText;
   final String hint;
   final TextEditingController controller;
-  const textField(
+  const TextField(
       {Key? key,
       required this.hm,
       required this.tm,
@@ -24,21 +24,21 @@ class textField extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<textField> createState() => _textFieldState();
+  State<TextField> createState() => _TextFieldState();
 }
 
-class _textFieldState extends State<textField> {
+class _TextFieldState extends State<TextField> {
   @override
   Widget build(BuildContext context) {
-    var Dlang = context.watch<LanguageProvider>();
+    // var Dlang = context.watch<LanguageProvider>();
     var lang = context.read<LanguageProvider>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.label != null && widget.label! && widget.labeText != null)
           Padding(
-            padding:
-                EdgeInsets.symmetric(vertical: widget.wm * 1.5, horizontal: widget.wm * 1.5),
+            padding: EdgeInsets.symmetric(
+                vertical: widget.wm * 1.5, horizontal: widget.wm * 1.5),
             child: Txt(
                 text: widget.labeText!,
                 style: text18white.copyWith(
@@ -55,9 +55,12 @@ class _textFieldState extends State<textField> {
             fillColor: Colors.white.withOpacity(0.1),
             hintText: widget.hint,
             hintStyle: text18white.copyWith(
-                fontSize: widget.tm * 1.8, color: Colors.white.withOpacity(0.4)),
-            contentPadding:
-                EdgeInsets.only(left: widget.wm * 4, bottom: widget.hm * 2.3, top: widget.hm * 2.3),
+                fontSize: widget.tm * 1.8,
+                color: Colors.white.withOpacity(0.4)),
+            contentPadding: EdgeInsets.only(
+                left: widget.wm * 4,
+                bottom: widget.hm * 2.3,
+                top: widget.hm * 2.3),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
                   color: Colors.white.withOpacity(0.1), width: widget.wm * 0.5),
@@ -69,11 +72,13 @@ class _textFieldState extends State<textField> {
               borderRadius: BorderRadius.circular(widget.wm * 3),
             ),
             border: OutlineInputBorder(
-              borderSide: BorderSide(color: lightBlueColor, width: widget.wm * 0.5),
+              borderSide:
+                  BorderSide(color: lightBlueColor, width: widget.wm * 0.5),
               borderRadius: BorderRadius.circular(widget.wm * 3),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: lightOrange, width: widget.wm * 0.5),
+              borderSide:
+                  BorderSide(color: lightOrange, width: widget.wm * 0.5),
               borderRadius: BorderRadius.circular(widget.wm * 3),
             ),
           ),
@@ -123,6 +128,7 @@ class _textFieldState extends State<textField> {
                 }
               }
             }
+            return null;
           },
         ),
       ],

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,15 +20,15 @@ class AuthProvider with ChangeNotifier {
       final googleUser = await googleSignIn.signIn();
       if (googleUser == null) return null;
       _user = googleUser;
-      print("_user!.displayName");
-      print(_user!.displayName);
-      print(_user!.email);
-      print(_user!.photoUrl);
-      final googleAuth = await googleUser.authentication;
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+      log("_user!.displayName");
+      log(_user!.displayName.toString());
+      log(_user!.email.toString());
+      log(_user!.photoUrl.toString());
+      // final googleAuth = await googleUser.authentication;
+      // final AuthCredential credential = GoogleAuthProvider.credential(
+      //   accessToken: googleAuth.accessToken,
+      //   idToken: googleAuth.idToken,
+      // );
       if (_user != null) {
         return _user;
       }
@@ -54,8 +56,8 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      print("user.toJson(");
-      print(user.toJson());
+      log("user.toJson(");
+      log(user.toJson());
       final credential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: user.email,
@@ -97,17 +99,17 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  addMyUser(User? Guser, UserModel? user) async {
-    if (user != null && Guser != null) {
+  addMyUser(User? guser, UserModel? user) async {
+    if (user != null && guser != null) {
       final docUser = FirebaseFirestore.instance.collection("users");
       final newUser = UserModel(
-          id: Guser.uid,
+          id: guser.uid,
           email: user.email,
           fullName: user.fullName,
-          image: Guser.photoURL,
+          image: guser.photoURL,
           phoneNumber: user.phoneNumber,
           password: user.password);
-      await docUser.doc(Guser.uid).set(newUser.toMap());
+      await docUser.doc(guser.uid).set(newUser.toMap());
     }
   }
 

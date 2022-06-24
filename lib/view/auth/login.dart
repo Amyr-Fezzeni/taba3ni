@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -263,7 +265,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 text18white.copyWith(fontSize: tm * 1.8, color: Colors.red),
           ),
           validator: (val) {
-            print("validator");
+            log("validator");
             if (val != null) {
               if (hint == "user@gmail.com") {
                 if (val.isEmpty) {

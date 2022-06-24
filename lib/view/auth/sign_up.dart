@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -11,7 +13,6 @@ import 'package:taba3ni/widgets/text_widget.dart';
 import 'package:taba3ni/widgets/transparent_btn.dart';
 
 import '../../models/user.dart';
-
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -35,7 +36,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   FocusNode f3 = FocusNode();
   FocusNode f4 = FocusNode();
 
-  
   @override
   void dispose() {
     super.dispose();
@@ -84,7 +84,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           labelText: "Name",
                           label: true,
                         )),
-                        Padding(
+                    Padding(
                         padding: EdgeInsets.only(
                             top: hm * 5, left: wm * 4, right: wm * 4),
                         child: textFormField(
@@ -150,12 +150,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ],
                             ),
                             function: () async {
-                              if(formkey.currentState!=null && formkey.currentState!.validate()){
-                                 UserModel user=UserModel(email: emailController.text,password: passwordController.text,fullName: nameController.text,phoneNumber: phoneController.text);
-                                 await context.read<AuthProvider>().signUpWithMail(context, user);
+                              if (formkey.currentState != null &&
+                                  formkey.currentState!.validate()) {
+                                UserModel user = UserModel(
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                    fullName: nameController.text,
+                                    phoneNumber: phoneController.text);
+                                await context
+                                    .read<AuthProvider>()
+                                    .signUpWithMail(context, user);
                               }
-                            
-                            } ),
+                            }),
                       ),
                     ),
                     Center(
@@ -175,16 +181,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 context: context,
                                 height: hm * 7,
                                 width: wm * 40,
-                                widget: SvgPicture.asset("assets/images/google.svg",
+                                widget: SvgPicture.asset(
+                                    "assets/images/google.svg",
                                     color: Colors.white),
                                 border: Border.all(
                                     color: Colors.white.withOpacity(0.2),
                                     width: wm * 0.5),
                                 borderRadius: BorderRadius.circular(wm * 5),
                                 function: () async {
-                                  final user = await context.read<AuthProvider>().googleLogin(context);
+                                  final user = await context
+                                      .read<AuthProvider>()
+                                      .googleLogin(context);
                                   if (user != null) {
-                                    nameController.text = user.displayName ?? "";
+                                    nameController.text =
+                                        user.displayName ?? "";
                                     emailController.text = user.email;
                                   }
                                 }),
@@ -223,7 +233,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           children: <TextSpan>[
                             TextSpan(
                                 text: 'Already have an account ',
-                                style: text18white.copyWith(fontSize: tm * 1.5)),
+                                style:
+                                    text18white.copyWith(fontSize: tm * 1.5)),
                             TextSpan(
                                 text: 'Log in',
                                 style: text18white.copyWith(
@@ -240,8 +251,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
         ),
-      if(context.watch<AuthProvider>().isLoading)
-      const Center(child:  CircularProgressIndicator())
+        if (context.watch<AuthProvider>().isLoading)
+          const Center(child: CircularProgressIndicator())
       ],
     );
   }
@@ -266,16 +277,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ? f1
               : hint == "+216 54 879 235"
                   ? f2
-              : hint == "user@gmail.com"
-                  ? f2
-                  : f4,
+                  : hint == "user@gmail.com"
+                      ? f2
+                      : f4,
           onFieldSubmitted: (val) {
-            FocusScope.of(context)
-                .requestFocus(hint == "Oliver Cydric" ? f2 :hint =="+216 54 879 235"? f3:f4);
+            FocusScope.of(context).requestFocus(hint == "Oliver Cydric"
+                ? f2
+                : hint == "+216 54 879 235"
+                    ? f3
+                    : f4);
           },
           controller: controller,
           onEditingComplete: () {
-            print(nameCorrect);
+            log(nameCorrect.toString());
             setState(() {});
           },
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -295,7 +309,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             suffixIcon: (hint == "Oliver Cydric" && nameCorrect) ||
                     (hint == "user@gmail.com" && emailCorrect) ||
-                    (hint == "ynYhs@XjfB1%" && passwordCorrect)||(hint == "+216 54 879 235" && phoneCorrect)
+                    (hint == "ynYhs@XjfB1%" && passwordCorrect) ||
+                    (hint == "+216 54 879 235" && phoneCorrect)
                 ? const Icon(
                     Icons.check,
                     color: Colors.white,
@@ -309,9 +324,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ? lightBlueColor
                           : hint == "ynYhs@XjfB1%" && passwordCorrect
                               ? lightBlueColor
-                               :hint == "+216 54 879 235" && phoneCorrect
-                              ? lightBlueColor
-                              : Colors.white.withOpacity(0.1),
+                              : hint == "+216 54 879 235" && phoneCorrect
+                                  ? lightBlueColor
+                                  : Colors.white.withOpacity(0.1),
                   width: wm * 0.5),
               borderRadius: BorderRadius.circular(wm * 3),
             ),
@@ -383,8 +398,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return lang.translate("Only numbers are accepted");
                   }
                 }
+              } else {
+                return null;
               }
             }
+            return null;
           },
         ),
       ],

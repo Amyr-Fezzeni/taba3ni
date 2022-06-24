@@ -13,7 +13,7 @@ Future<dynamic> popup(BuildContext context, String confirmText,{String? title,St
             builder: (context,stating) {
               final hm = SizeConfig.heightMultiplier;
               final wm = SizeConfig.widthMultiplier;
-              final tm = SizeConfig.textMultiplier;
+              // final tm = SizeConfig.textMultiplier;
               return Dialog(
                 shape: RoundedRectangleBorder(
                     borderRadius:
