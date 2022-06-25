@@ -113,19 +113,7 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  addGoogleUser(User? user) async {
-    if (user != null) {
-      final docUser = FirebaseFirestore.instance.collection("users");
-      final newUser = UserModel(
-          id: user.uid,
-          email: user.email ?? "",
-          fullName: user.displayName ?? "",
-          phoneNumber: user.phoneNumber ?? "",
-          password: "",
-          image: user.photoURL);
-      await docUser.doc(user.uid).set(newUser.toMap());
-    }
-  }
+
 
   Future<bool> googleLogout() async {
     try {

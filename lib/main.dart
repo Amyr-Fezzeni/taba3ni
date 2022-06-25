@@ -13,7 +13,7 @@ import 'package:taba3ni/providers/data_provider.dart';
 import 'package:taba3ni/providers/language.dart';
 import 'package:taba3ni/providers/state_provider.dart';
 import 'package:taba3ni/providers/user_provider.dart';
-import 'package:taba3ni/views/welcome.dart';
+import 'package:taba3ni/views/page_structure.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
       return OrientationBuilder(builder: (context, orientation) {
         SizeConfig().init(constraints, orientation);
         return ConnectionNotifier(
+          // child: PageStructure(),
           child: ThemeProvider(
               initTheme: darkTheme,
               builder: (context, myTheme) {
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
                   theme: myTheme,
                   debugShowCheckedModeBanner: false,
                   initialRoute: '/',
-                  routes: {'/': (context) => const WelcomeScreen()},
+                  routes: {'/': (context) => const PageStructure()},
                 );
               }),
         );
