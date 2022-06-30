@@ -1,8 +1,10 @@
 // ignore_for_file: unnecessary_string_escapes
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:taba3ni/constant/size_config.dart';
 import 'package:taba3ni/constant/style.dart';
+import 'package:taba3ni/view/auth/login.dart';
 import 'package:taba3ni/view/auth/sign_up.dart';
 import 'package:taba3ni/widgets/primary_btn.dart';
 import 'package:taba3ni/widgets/text_widget.dart';
@@ -36,7 +38,7 @@ class WelcomeScreen extends StatelessWidget {
             children: [
               SizedBox(height: hm*55,),
               Padding(padding: EdgeInsets.symmetric(horizontal: wm*10),child:
-              Txt(text: "Simple way to help control your savings", style:titleWhite.copyWith(fontSize:tm!*4.3 )) 
+              Txt(text: "Feel safe with us", style:titleWhite.copyWith(fontSize:tm!*4.3 )) 
               ),
               Padding(
                 padding:  EdgeInsets.only(top:wm*10.0),
@@ -53,7 +55,10 @@ class WelcomeScreen extends StatelessWidget {
           TextSpan(
                 text: 'Already have an account ',
                 style: text18white.copyWith(fontSize: tm*1.5)),
-          TextSpan(text: 'Log in',style: text18white.copyWith(color:lightBlueColor,fontWeight: FontWeight.w800 ,fontSize: tm*1.5)),
+          TextSpan(text: 'Log in',style: text18white.copyWith(color:lightBlueColor,fontWeight: FontWeight.w800 ,fontSize: tm*1.5), recognizer:  TapGestureRecognizer()..onTap = () => Navigator.push(
+                 context,
+                 MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  )),
         ],
       ),
     ),
