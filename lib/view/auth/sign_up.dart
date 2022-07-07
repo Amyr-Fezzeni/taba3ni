@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -6,6 +7,7 @@ import 'package:taba3ni/constant/size_config.dart';
 import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/providers/auth_provider.dart';
 import 'package:taba3ni/providers/language.dart';
+import 'package:taba3ni/view/auth/login.dart';
 import 'package:taba3ni/widgets/primary_btn.dart';
 import 'package:taba3ni/widgets/text_form_field.dart';
 import 'package:taba3ni/widgets/text_widget.dart';
@@ -87,7 +89,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         )),
                     Padding(
                         padding: EdgeInsets.only(
-                            top: hm * 2.5, left: wm * 4, right: wm * 4),
+                            top: hm * 0.5, left: wm * 4, right: wm * 4),
                         child: CustomTextField(
                          hint:
                           "user@gmail.com",
@@ -196,7 +198,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     Center(
                         child: Padding(
-                      padding: EdgeInsets.only(top: wm * 4.0),
+                      padding: EdgeInsets.only(top: wm * 4.0,bottom: hm*4),
                       child: RichText(
                         text: TextSpan(
                           children: <TextSpan>[
@@ -208,7 +210,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 style: text18white.copyWith(
                                     color: lightBlueColor,
                                     fontWeight: FontWeight.w800,
-                                    fontSize: tm * 1.5)),
+                                    fontSize: tm * 1.5),
+                                     recognizer:  TapGestureRecognizer()..onTap = () =>
+                                     Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LoginScreen()),
+                                    )
+                                    ),
                           ],
                         ),
                       ),

@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -110,8 +111,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             function: () {
                               if (formkey.currentState != null &&
                                   formkey.currentState!.validate()) {
-                                context.read<AuthProvider>().loginWithEmail(context,
-                                    emailController.text, passwordController.text);
+                                context.read<AuthProvider>().loginWithEmail(
+                                    context,
+                                    emailController.text,
+                                    passwordController.text);
                               }
                             }),
                       ),
@@ -133,18 +136,22 @@ class _LoginScreenState extends State<LoginScreen> {
                                 context: context,
                                 height: hm * 7,
                                 width: wm * 40,
-                                widget: SvgPicture.asset("assets/images/google.svg",
+                                widget: SvgPicture.asset(
+                                    "assets/images/google.svg",
                                     color: Colors.white),
                                 border: Border.all(
                                     color: Colors.white.withOpacity(0.2),
                                     width: wm * 0.5),
                                 borderRadius: BorderRadius.circular(wm * 5),
-                                function: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const SignUpScreen()),
-                                    )),
+                                function: () async {
+                                  final user = await context
+                                      .read<AuthProvider>()
+                                      .googleLogin(context);
+                                  if (user != null) {
+                                    emailController.text = user.email;
+                                    passwordController.text = "";
+                                  }
+                                }),
                             SizedBox(
                               width: wm * 2,
                             ),
@@ -180,13 +187,21 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: <TextSpan>[
                             TextSpan(
                                 text: 'You don' "t have an account ",
-                                style: text18white.copyWith(fontSize: tm * 1.5)),
+                                style:
+                                    text18white.copyWith(fontSize: tm * 1.5)),
                             TextSpan(
                                 text: 'Sign up',
                                 style: text18white.copyWith(
                                     color: lightBlueColor,
                                     fontWeight: FontWeight.w800,
-                                    fontSize: tm * 1.5)),
+                                    fontSize: tm * 1.5),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const SignUpScreen()),
+                                      )),
                           ],
                         ),
                       ),
@@ -197,8 +212,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
-      if(context.watch<AuthProvider>().isLoading)
-    const Center(child:   CircularProgressIndicator())
+        if (context.watch<AuthProvider>().isLoading)
+          const Center(child: CircularProgressIndicator())
       ],
     );
   }

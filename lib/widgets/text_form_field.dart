@@ -152,14 +152,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 }
               } else if (widget.hint == "+216 54 879 235") {
                  if (val.isEmpty) {
-                  return lang.translate("Please enter your password");
+                  return lang.translate("Please enter your phone number");
                 }else
                   if (!RegExp("^[\u0000-\u007F]+\$").hasMatch(val)) {
                     return lang.translate("Use Latin keyboard");
                   }
                   else if (!RegExp("^[0-9]").hasMatch(val)) {
                     return lang.translate("Only numbers are accepted");
-                  } else {
+                  } else if(val.length<8) {
+                     return lang.translate("Please enter a valid phone number");
+                  }else{
                   Future.delayed(Duration.zero, () {
                     setState(() {
                       correct = true;

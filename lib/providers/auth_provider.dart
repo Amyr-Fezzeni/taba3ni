@@ -11,39 +11,19 @@ import 'package:taba3ni/widgets/popup.dart';
 
 class AuthProvider with ChangeNotifier {
   final googleSignIn = GoogleSignIn();
-  GoogleSignInAccount? _user;
-  GoogleSignInAccount get user => _user!;
+  GoogleSignInAccount? googleUser;
+  GoogleSignInAccount get user => googleUser!;
   bool isLoading = false;
 
   Future<GoogleSignInAccount?> googleLogin(BuildContext context) async {
     try {
-      final googleUser = await googleSignIn.signIn();
-      if (googleUser == null) return null;
-      _user = googleUser;
-      print("_user!.displayName");
-      print(_user!.displayName);
-      print(_user!.email);
-      print(_user!.photoUrl);
-      final googleAuth = await googleUser.authentication;
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      if (_user != null) {
-        return _user;
+      final user = await googleSignIn.signIn();
+      if (user == null) return null;
+      googleUser = user;
+      if (googleUser != null) {
+        return googleUser;
       }
       return null;
-      /*await FirebaseAuth.instance.signInWithCredential(credential);
-      var auth = FirebaseAuth.instance.currentUser;
-      if (auth != null) {
-        var _token = await SharedPreferences.getInstance();
-        _token.setString("token", auth.uid);
-        _token.setString("email", auth.email ?? "");
-        await addUser(auth);
-        notifyListeners();
-        return true;
-      }
-      return false;*/
 
     } on PlatformException catch (e) {
       if (e.code == "sign_in_canceled") {
@@ -55,6 +35,7 @@ class AuthProvider with ChangeNotifier {
       popup(context, "Ok", title: "Error", description: e.toString());
       return null;
     }
+    return null;
   }
 
   loginWithEmail(BuildContext context, String email, password) async {
