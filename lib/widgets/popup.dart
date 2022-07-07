@@ -9,26 +9,24 @@ Future<dynamic> popup(BuildContext context, String confirmText,
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, stating) {
-          final hm = SizeConfig.heightMultiplier;
-          final wm = SizeConfig.widthMultiplier;
           // final tm = SizeConfig.textMultiplier;
           return Dialog(
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(wm! * 5.0)),
+                borderRadius: BorderRadius.circular(1.5 * 5.0)),
             child: SizedBox(
-              height: hm! * 35,
+              height: 1.5 * 35,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
                   if (title != null)
                     Positioned(
-                      top: hm * 6,
+                      top: 1.5 * 6,
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(
-                            wm * 2.5, hm * 1, wm * 2.5, hm * 3),
+                        padding: const EdgeInsets.fromLTRB(
+                            1.5 * 2.5, 1.5 * 1, 1.5 * 2.5, 1.5 * 3),
                         child: Container(
-                          width: wm * 60,
-                          height: hm * 10,
+                          width: 1.5 * 60,
+                          height: 1.5 * 10,
                           color: Colors.white,
                           child: Text(
                             title,
@@ -42,9 +40,9 @@ Future<dynamic> popup(BuildContext context, String confirmText,
                   if (description != null)
                     Positioned(
                       child: Container(
-                        margin: EdgeInsets.only(top: hm * 2),
-                        width: wm * 60,
-                        height: hm * 10,
+                        margin: const EdgeInsets.only(top: 1.5 * 2),
+                        width: 1.5 * 60,
+                        height: 1.5 * 10,
                         color: Colors.white,
                         child: Text(
                           description,
@@ -55,41 +53,41 @@ Future<dynamic> popup(BuildContext context, String confirmText,
                       ),
                     ),
                   Positioned(
-                    bottom: hm * 4,
+                    bottom: 1.5 * 4,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         primaryButton(
                             context: context,
-                            height: hm * 5,
-                            width: wm * 30,
-                            borderRadius: BorderRadius.circular(wm * 4),
-                            border:
-                                Border.all(color: Colors.grey, width: wm * 0.2),
+                            height: 1.5 * 5,
+                            width: 1.5 * 30,
+                            borderRadius: BorderRadius.circular(1.5 * 4),
+                            border: Border.all(
+                                color: Colors.grey, width: 1.5 * 0.2),
                             color: Colors.white,
                             function: () => Navigator.pop(context),
                             widget: FittedBox(
                               child: Padding(
-                                padding:
-                                    EdgeInsets.symmetric(horizontal: wm * 2),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 1.5 * 2),
                                 child: Text(
                                   "Cancel",
                                   style: text18black.copyWith(fontSize: 20),
                                 ),
                               ),
                             )),
-                        SizedBox(
-                          width: wm * 4,
+                        const SizedBox(
+                          width: 1.5 * 4,
                         ),
                         primaryButton(
                             context: context,
-                            height: hm * 5.0,
-                            width: wm * 30,
-                            borderRadius: BorderRadius.circular(wm * 4),
+                            height: 1.5 * 5.0,
+                            width: 1.5 * 30,
+                            borderRadius: BorderRadius.circular(1.5 * 4),
                             widget: FittedBox(
                               child: Padding(
-                                padding:
-                                    EdgeInsets.symmetric(horizontal: wm * 2),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 1.5 * 2),
                                 child: Text(
                                   confirmText,
                                   style: text18white.copyWith(fontSize: 20),
