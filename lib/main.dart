@@ -21,7 +21,7 @@ void main() async {
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform, d
+    options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
     MultiProvider(
