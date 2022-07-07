@@ -1,10 +1,11 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/const.dart';
 import 'package:taba3ni/providers/user_provider.dart';
 import 'package:taba3ni/views/profile/widgets/change_password.dart';
 import 'package:taba3ni/views/profile/widgets/change_phone_number.dart';
+
+import '../../widgets/popup.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -176,28 +177,27 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Card(
-                color: primaryColor,
-                elevation: 3,
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    primary: primaryColor),
                 child: Container(
-                  height: 50,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                          onPressed: () => log("logOut"),
-                          child: Text(
-                            "Disconnect",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1
-                                ?.copyWith(color: Colors.white, fontSize: 20),
-                          )),
-                    ],
+                  height: 35,
+                  width: 150,
+                  margin: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Text(
+                      'Log out',
+                      style: textbody2,
+                    ),
                   ),
                 ),
+                onPressed: () async {
+                  await popup(context, "Ok",
+                      title: "Notification", description: "description");
+                },
               ),
             ],
           )),

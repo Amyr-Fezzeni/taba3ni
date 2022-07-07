@@ -1,12 +1,10 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taba3ni/models/user.dart';
 import 'package:taba3ni/services/shared_data.dart';
 import 'package:taba3ni/services/user_service.dart';
 import 'package:taba3ni/views/auth/login.dart';
-import 'package:taba3ni/widgets/popup_copy.dart';
+import 'package:taba3ni/widgets/popup.dart';
 
 class UserProvider with ChangeNotifier {
   UserModel? currentUser = UserModel(
@@ -105,22 +103,26 @@ class UserProvider with ChangeNotifier {
 
   Future<void> validator(BuildContext context) async {
     if (newPasswordConfirmed.text.isEmpty || newPassword.text.isEmpty) {
-      await PopUp.showMyDialogAlert(context, "All fields required.", "Ok");
+      await popup(context, "Ok",
+          title: "Notification", description: "All fields are required.");
     } else if (newPasswordConfirmed.text != newPassword.text) {
-      await PopUp.showMyDialogAlert(
-          context, "New paswords doesn't match.", "Ok");
+      await popup(context, "Ok",
+          title: "Notification", description: "New passwords doesn't match.");
     } else if (oldPassword.text != currentUser?.password) {
-      await PopUp.showMyDialogAlert(context, "Old password incorrect.", "Ok");
+      await popup(context, "Ok",
+          title: "Notification", description: "Old password incorrect.");
     } else {
       currentUser?.password = newPassword.text;
       bool result = await UserService.changePassword(currentUser!);
 
       if (result) {
-        await PopUp.showMyDialogAlert(
-            context, "Password changed seccesfully.", "Ok");
+        await popup(context, "Ok",
+            title: "Notification",
+            description: "Password changed seccesfully.");
       } else {
-        await PopUp.showMyDialogAlert(
-            context, "Connection error, please try again later", "Ok");
+        await popup(context, "Ok",
+            title: "Notification",
+            description: "Connection error, please try again later.");
       }
 
       Navigator.pop(context);
@@ -129,35 +131,40 @@ class UserProvider with ChangeNotifier {
 
   Future<void> validatorPhone(BuildContext context, String phone) async {
     if (phone.isEmpty) {
-      await PopUp.showMyDialogAlert(context, "Phone number empty!", "Ok");
+      await popup(context, "Ok",
+          title: "Notification", description: "Phone number empty!");
       return;
     }
     if (phone.length != 8) {
-      await PopUp.showMyDialogAlert(context, "Phone number invalid!", "Ok");
+      await popup(context, "Ok",
+          title: "Notification", description: "Phone number invalid!");
       return;
     }
     if (phone == currentUser?.phoneNumber.toString()) {
-      await PopUp.showMyDialogAlert(
-          context, "You can't update the same phone number!", "Ok");
+      await popup(context, "Ok",
+          title: "Notification",
+          description: "You can't update the same phone number!");
       return;
     }
     if (await UserService.checkExistingUser(phone)) {
-      await PopUp.showMyDialogAlert(
-          context, "Phone number already existe!", "Ok");
+      await popup(context, "Ok",
+          title: "Notification", description: "Phone number already existe!");
       return;
     }
     currentUser?.phoneNumber = phone;
     bool result = await UserService.changePhoneNumber(currentUser!);
 
     if (result) {
-      await PopUp.showMyDialogAlert(
-          context, "Phone number changed seccesfully.", "Ok");
+      await popup(context, "Ok",
+          title: "Notification",
+          description: "Phone number changed seccesfully.");
       UserModel? user = await UserService.getUserByEmail(currentUser!.email);
       if (user != null) setUser(user);
       notifyListeners();
     } else {
-      await PopUp.showMyDialogAlert(
-          context, "Connection error, please try again later", "Ok");
+      await popup(context, "Ok",
+          title: "Notification",
+          description: "Connection error, please try again later.");
     }
 
     Navigator.pop(context);
