@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/const.dart';
 import 'package:taba3ni/providers/user_provider.dart';
+import 'package:taba3ni/views/login/validator.dart';
 
 class ChangePhoneNumber extends StatefulWidget {
   const ChangePhoneNumber({Key? key}) : super(key: key);
@@ -125,9 +126,8 @@ class _ChangePhoneNumberState extends State<ChangePhoneNumber> {
                     backgroundColor:
                         MaterialStateProperty.all<Color>(primaryColor),
                   ),
-                  onPressed: () => context
-                      .read<UserProvider>()
-                      .validatorPhone(context, newPhone.text),
+                  onPressed: () =>
+                      validatorPhone(context, phone.text, newPhone.text),
                   child: SizedBox(
                     width: 170,
                     child: Center(

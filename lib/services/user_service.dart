@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:taba3ni/models/user.dart';
 import 'package:taba3ni/services/logic_service.dart';
@@ -37,6 +39,13 @@ class UserService {
   static Future<bool> checkExistingUser(String email) async {
     final snapshot =
         await collection.where('email', isEqualTo: email).limit(1).get();
+    if (snapshot.docs.isNotEmpty) return true;
+    return false;
+  }
+
+ static Future<bool> checkExistingPhone(String phone) async {
+    final snapshot =
+        await collection.where('phoneNumber', isEqualTo: phone).limit(1).get();
     if (snapshot.docs.isNotEmpty) return true;
     return false;
   }
@@ -143,5 +152,33 @@ class UserService {
     } else {
       return null;
     }
+  }
+
+   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllTrackedUser(
+      List<String> listId) {
+    return FirebaseFirestore.instance
+        .collection("users")
+        .where("id", whereIn: listId)
+        .snapshots();
+  }
+  static Future<LatLng> getUserCurrentLocation() async {
+     bool serviceEnabled;
+                LocationPermission permission;
+                serviceEnabled = await Geolocator.isLocationServiceEnabled();
+                if (!serviceEnabled) {
+                  return Future.error("service desactivé");
+                }
+                permission = await Geolocator.checkPermission();
+                if (permission == LocationPermission.denied) {
+                  permission = await Geolocator.requestPermission();
+                  if (permission == LocationPermission.always) {
+                    return Future.error("permission");
+                  }
+                }
+                Position pos = await Geolocator.getCurrentPosition();
+                LatLng l = LatLng(pos.latitude, pos.longitude);
+                log(pos.toString());
+
+    return l;
   }
 }

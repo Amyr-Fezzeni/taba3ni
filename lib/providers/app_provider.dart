@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/services/shared_data.dart';
-
 
 class ThemeNotifier with ChangeNotifier {
   Color bgColor = lightBgColor;
@@ -30,10 +28,11 @@ class ThemeNotifier with ChangeNotifier {
     }
     darkMode = value;
     notifyListeners();
-     DataPrefrences.setDarkMode(darkMode);
+    DataPrefrences.setDarkMode(darkMode);
   }
-  initTheme(value){
-      switch (value) {
+
+  initTheme(value) {
+    switch (value) {
       case true:
         bgColor = darkBgColor;
         text18 = text18white;

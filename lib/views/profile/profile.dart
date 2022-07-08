@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/const.dart';
+import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/providers/auth_provider.dart';
 import 'package:taba3ni/providers/user_provider.dart';
 import 'package:taba3ni/views/profile/widgets/change_password.dart';
 import 'package:taba3ni/views/profile/widgets/change_phone_number.dart';
+import 'package:taba3ni/widgets/primary_btn.dart';
+import 'package:taba3ni/widgets/text_widget.dart';
 
 import '../../widgets/popup.dart';
 
@@ -25,14 +28,20 @@ class ProfileScreen extends StatelessWidget {
           child: Center(
               child: Column(
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 backgroundColor: primaryColor,
                 radius: 95,
-                child: CircleAvatar(
-                  backgroundColor: bgColor,
-                  backgroundImage: AssetImage("assets/profile.jpg"),
-                  radius: 90,
-                ),
+                child: user!.image!.toString().isEmpty
+                    ? const CircleAvatar(
+                        backgroundColor: bgColor,
+                        backgroundImage: AssetImage("assets/profile.jpg"),
+                        radius: 90,
+                      )
+                    : CircleAvatar(
+                        backgroundColor: bgColor,
+                        backgroundImage: NetworkImage(user.image!),
+                        radius: 90,
+                      ),
               ),
               const SizedBox(
                 height: 20,
@@ -52,7 +61,7 @@ class ProfileScreen extends StatelessWidget {
                         style: textbody1,
                       ),
                       Text(
-                        user!.fullName,
+                        user.fullName,
                         style: textbody1,
                       ),
                     ],
@@ -177,30 +186,23 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    primary: primaryColor),
-                child: Container(
-                  height: 35,
-                  width: 150,
-                  margin: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Text(
-                      'Log out',
-                      style: textbody2,
-                    ),
-                  ),
-                ),
-                onPressed: () async {
-                  await popup(context, "Ok",
+              primaryButton(
+                  context: context,
+                  height: 50,
+                  width: 260,
+                  widget: Txt(
+                      text: "Logout",
+                      style: text18black.copyWith(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 20,
+                          color: darkBgColor)),
+                  borderRadius: BorderRadius.circular(30),
+                  function: () async => await popup(context, "Ok",
                       title: "Notification",
-                      confirmFunction: ()=> context.read<AuthProvider>().logOut(context),
-                      description: "Are you sure you want to log out ?");
-                },
-              ),
+                      confirmFunction: () =>
+                          context.read<AuthProvider>().logOut(context),
+                      description: "Are you sure you want to log out ?")),
+              
             ],
           )),
         ),

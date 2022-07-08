@@ -82,11 +82,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         context: context,
                         height: 50,
                         width: 200,
-                        widget: Txt(
-                            text: "Log in",
-                            style: text18black.copyWith(
-                                fontWeight: FontWeight.w800,
-                                color: darkBgColor.withOpacity(0.8))),
+                        widget: context.watch<AuthProvider>().isLoading
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.black87,
+                                ),
+                              )
+                            : Txt(
+                                text: "Log in",
+                                style: text18black.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    color: darkBgColor.withOpacity(0.8))),
                         borderRadius: BorderRadius.circular(30),
                         gradient: const LinearGradient(
                           begin: Alignment.topRight,

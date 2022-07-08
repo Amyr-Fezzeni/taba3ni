@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/const.dart';
-import 'package:taba3ni/providers/user_provider.dart';
+import 'package:taba3ni/views/login/validator.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({Key? key}) : super(key: key);
@@ -12,17 +11,20 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
+  TextEditingController oldPassword = TextEditingController(text: "");
+  TextEditingController newPassword = TextEditingController(text: "");
+  TextEditingController newPasswordConfirmed = TextEditingController(text: "");
+  bool isObscureOld = true;
+  bool isObscure = true;
+  bool isObscureConfirmed = true;
   @override
   void initState() {
     super.initState();
-    context.read<UserProvider>().initChangePassword();
   }
 
   @override
   Widget build(BuildContext context) {
-    var pass = context.watch<UserProvider>();
     var size = MediaQuery.of(context).size;
-
     return DraggableScrollableSheet(
       initialChildSize: MediaQuery.of(context).viewInsets.bottom > 0 ? 1 : 0.7,
       expand: false,
@@ -68,18 +70,19 @@ class _ChangePasswordState extends State<ChangePassword> {
                   width: size.width * 0.55,
                   height: 40,
                   child: CupertinoTextField(
-                    controller: pass.oldPassword,
+                    controller: oldPassword,
                     style: textbody1,
-                    obscureText: pass.isObscureOld,
+                    obscureText: isObscureOld,
                     decoration: BoxDecoration(
                         color: bgColor,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: primaryColor, width: 1)),
                     suffix: IconButton(
-                        onPressed: () =>
-                            context.read<UserProvider>().changeOldVisibility(),
+                        onPressed: () => setState(() {
+                              isObscureOld = !isObscureOld;
+                            }),
                         icon: Icon(
-                          !pass.isObscureOld
+                          !isObscureOld
                               ? Icons.visibility
                               : Icons.visibility_off,
                           color: primaryColor,
@@ -105,20 +108,19 @@ class _ChangePasswordState extends State<ChangePassword> {
                   width: size.width * 0.55,
                   height: 40,
                   child: CupertinoTextField(
-                    controller: pass.newPassword,
+                    controller: newPassword,
                     style: textbody1,
-                    obscureText: pass.isObscure,
+                    obscureText: isObscure,
                     decoration: BoxDecoration(
                         color: bgColor,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: primaryColor, width: 1)),
                     suffix: IconButton(
-                        onPressed: () =>
-                            context.read<UserProvider>().changePassVisibility(),
+                        onPressed: () => setState(() {
+                              isObscure = !isObscure;
+                            }),
                         icon: Icon(
-                          !pass.isObscure
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                          !isObscure ? Icons.visibility : Icons.visibility_off,
                           color: primaryColor,
                         )),
                   ),
@@ -142,19 +144,19 @@ class _ChangePasswordState extends State<ChangePassword> {
                   width: size.width * 0.55,
                   height: 40,
                   child: CupertinoTextField(
-                    controller: pass.newPasswordConfirmed,
+                    controller: newPasswordConfirmed,
                     style: textbody1,
-                    obscureText: pass.isObscureConfirmed,
+                    obscureText: isObscureConfirmed,
                     decoration: BoxDecoration(
                         color: bgColor,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: primaryColor, width: 1)),
                     suffix: IconButton(
-                        onPressed: () => context
-                            .read<UserProvider>()
-                            .changeConfPassVisibility(),
+                        onPressed: () => setState(() {
+                              isObscureConfirmed = !isObscureConfirmed;
+                            }),
                         icon: Icon(
-                          !pass.isObscureConfirmed
+                          !isObscureConfirmed
                               ? Icons.visibility
                               : Icons.visibility_off,
                           color: primaryColor,
@@ -173,8 +175,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                     backgroundColor:
                         MaterialStateProperty.all<Color>(primaryColor),
                   ),
-                  onPressed: () =>
-                      context.read<UserProvider>().validator(context),
+                  onPressed: () => changePasswordvalidator(
+                      context, oldPassword, newPassword, newPasswordConfirmed),
                   child: SizedBox(
                     width: 150,
                     child: Center(

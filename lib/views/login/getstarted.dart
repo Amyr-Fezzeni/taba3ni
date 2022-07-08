@@ -19,12 +19,8 @@ class IndexScreen extends StatelessWidget {
       body: FutureBuilder(
           future: context.read<AuthProvider>().checkLogin(context),
           builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const SizedBox(
-                child: Center(child: CircularProgressIndicator()),
-              );
-            }
-            return SingleChildScrollView(
+            if (snapshot.hasData && snapshot.data == false) {
+              return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
@@ -91,6 +87,10 @@ class IndexScreen extends StatelessWidget {
                 ],
               ),
             );
+            }
+             return const SizedBox(
+                child: Center(child: CircularProgressIndicator()),
+              );
           }),
     );
   }

@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
@@ -19,11 +18,14 @@ class AuthProvider with ChangeNotifier {
   GoogleSignInAccount get user => googleUser!;
   bool isLoading = false;
 
-  Future<bool?> checkLogin(BuildContext context) async {
+  Future<bool> checkLogin(BuildContext context) async {
+    await Future.delayed(const Duration(milliseconds: 200));
     log("Shared prefrences : ${DataPrefrences.getLogin()}, ${DataPrefrences.getPassword()}");
     if (DataPrefrences.getLogin().isNotEmpty &&
         DataPrefrences.getPassword().isNotEmpty) {
-      login(context, DataPrefrences.getLogin(), DataPrefrences.getPassword());
+      await login(
+          context, DataPrefrences.getLogin(), DataPrefrences.getPassword());
+      return true;
     }
     return false;
   }
@@ -81,7 +83,12 @@ class AuthProvider with ChangeNotifier {
         email: email.toString().trim(),
         phoneNumber: phoneNumber,
         image: photo,
-        password: password);
+        password: password,
+        baned: [],
+        followed: [],
+        requested: [],
+        sharedLocation: []
+        );
 
     var result = await UserService.addUser(tempUser);
 

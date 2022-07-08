@@ -1,11 +1,5 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:async';
-import 'dart:typed_data';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 
 class NotificationService {
   // static late AndroidNotificationChannel channel;
@@ -240,4 +234,4 @@ class NotificationService {
 //         .where("to", isEqualTo: id)
 //         .snapshots();
 //   }
- }
+}

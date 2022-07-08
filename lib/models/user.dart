@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class UserModel {
@@ -14,6 +15,11 @@ class UserModel {
   DateTime? lastUpdateLocation;
   bool isLoggedIn;
   bool locationActivated;
+  List<String> requested;
+  List<String> followed;
+  List<String> baned;
+  List<String> sharedLocation;
+
   UserModel({
     this.id,
     required this.fullName,
@@ -26,11 +32,15 @@ class UserModel {
     this.lastUpdateLocation,
     this.isLoggedIn = false,
     this.locationActivated = false,
+    required this.baned,
+    required this.followed,
+    required this.requested,
+    required this.sharedLocation,
   });
 
   @override
   String toString() {
-    return 'User(id: $id, fullName: $fullName, email: $email, phoneNumber: $phoneNumber, image: $image, password: $password, location: $location, lastLoggedIn: $lastLoggedIn, lastUpdateLocation: $lastUpdateLocation, isLoggedIn: $isLoggedIn, locationActivated: $locationActivated)';
+    return 'User(id: $id, fullName: $fullName, email: $email, phoneNumber: $phoneNumber, image: $image, password: $password, location: $location, lastLoggedIn: $lastLoggedIn, lastUpdateLocation: $lastUpdateLocation, isLoggedIn: $isLoggedIn, locationActivated: $locationActivated, sharedLocation:$sharedLocation, followed:$followed, requested:$requested, baned:$baned)';
   }
 
   Map<String, dynamic> toMap() {
@@ -40,23 +50,31 @@ class UserModel {
       'email': email,
       'phoneNumber': phoneNumber,
       'password': password,
-      'location': location,
+      'location': location == null
+          ? null
+          : GeoPoint(location!.latitude, location!.longitude),
       'image': image,
       'lastLoggedIn': lastLoggedIn?.millisecondsSinceEpoch,
       'lastUpdateLocation': lastUpdateLocation?.millisecondsSinceEpoch,
       'isLoggedIn': isLoggedIn,
       'locationActivated': locationActivated,
+      'followed': followed,
+      'baned': baned,
+      'requested': requested,
+      'sharedLocation': sharedLocation
     };
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
+    GeoPoint? gPoint = map['location'];
     return UserModel(
       id: map['id'] != null ? map['id'] as String : null,
       fullName: map['fullName'] as String,
       email: map['email'] as String,
       phoneNumber: map['phoneNumber'] as String,
       password: map['password'] as String,
-      location: map['location'],
+      location:
+          gPoint != null ? LatLng(gPoint.latitude, gPoint.longitude) : null,
       image: map['image'],
       lastLoggedIn: map['lastLoggedIn'] != null
           ? DateTime.fromMillisecondsSinceEpoch(map['lastLoggedIn'] as int)
@@ -67,6 +85,10 @@ class UserModel {
           : null,
       isLoggedIn: map['isLoggedIn'] as bool,
       locationActivated: map['locationActivated'] as bool,
+      followed: map['followed'],
+      requested: map['requested'],
+      baned: map['baned'],
+      sharedLocation: map['sharedLocation'],
     );
   }
 
