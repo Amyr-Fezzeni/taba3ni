@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/const.dart';
+import 'package:taba3ni/providers/auth_provider.dart';
 import 'package:taba3ni/providers/user_provider.dart';
 import 'package:taba3ni/views/profile/widgets/change_password.dart';
 import 'package:taba3ni/views/profile/widgets/change_phone_number.dart';
@@ -117,30 +119,28 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              // Card(
-              //   color: bgColor,
-              //   elevation: 3,
-              //   child: Container(
-              //     height: 50,
-              //     padding:
-              //         const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //       children: [
-              //         Text(
-              //           "Dark mode :",
-              //           style: Theme.of(context).textTheme.bodyText1,
-              //         ),
-              //         CupertinoSwitch(
-              //             activeColor: provider.btnColor,
-              //             value: provider.darkMode,
-              //             onChanged: (value) => context
-              //                 .read<AppProvider>()
-              //                 .changeDarkMode(value)),
-              //       ],
-              //     ),
-              //   ),
-              // ),
+              Card(
+                color: bgColor,
+                elevation: 3,
+                child: Container(
+                  height: 50,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Dark mode :",
+                        style: textbody1,
+                      ),
+                      CupertinoSwitch(
+                          activeColor: primaryColor,
+                          value: true,
+                          onChanged: (value) => false),
+                    ],
+                  ),
+                ),
+              ),
               Card(
                 color: bgColor,
                 elevation: 3,
@@ -196,7 +196,9 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 onPressed: () async {
                   await popup(context, "Ok",
-                      title: "Notification", description: "description");
+                      title: "Notification",
+                      confirmFunction: ()=> context.read<AuthProvider>().logOut(context),
+                      description: "Are you sure you want to log out ?");
                 },
               ),
             ],

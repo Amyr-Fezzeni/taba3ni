@@ -1,9 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taba3ni/models/user.dart';
 import 'package:taba3ni/services/shared_data.dart';
 import 'package:taba3ni/services/user_service.dart';
-import 'package:taba3ni/views/auth/login.dart';
 import 'package:taba3ni/views/login/login.dart';
 import 'package:taba3ni/widgets/popup.dart';
 
@@ -18,7 +19,7 @@ class UserProvider with ChangeNotifier {
 
   bool isLoggedIn = false;
   bool isLoading = false;
-
+  
   setUser(UserModel user) {
     currentUser = user;
     DataPrefrences.setLogin(user.phoneNumber.toString());

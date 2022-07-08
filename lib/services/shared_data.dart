@@ -15,4 +15,9 @@ class DataPrefrences {
   
   static String getPassword() => _preferences.getString('password') ?? "";
 
+  static Future<void> setDarkMode(bool value) async =>
+      await _preferences.setBool("darkMode", value);
+  
+  static bool getDarkMode() => _preferences.getBool('darkMode') ?? false;
+
 }

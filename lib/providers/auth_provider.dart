@@ -1,138 +1,131 @@
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 import 'package:taba3ni/models/user.dart';
-import 'package:taba3ni/views/login/login.dart';
+import 'package:taba3ni/providers/user_provider.dart';
+import 'package:taba3ni/services/shared_data.dart';
+import 'package:taba3ni/services/user_service.dart';
+import 'package:taba3ni/views/login/getstarted.dart';
+import 'package:taba3ni/views/login/signup.dart';
+import 'package:taba3ni/views/page_structure.dart';
 import 'package:taba3ni/widgets/popup.dart';
 
 class AuthProvider with ChangeNotifier {
   final googleSignIn = GoogleSignIn();
-  GoogleSignInAccount? _user;
-  GoogleSignInAccount get user => _user!;
+  GoogleSignInAccount? googleUser;
+  GoogleSignInAccount get user => googleUser!;
   bool isLoading = false;
 
-  Future<GoogleSignInAccount?> googleLogin(BuildContext context) async {
-    try {
-      final googleUser = await googleSignIn.signIn();
-      if (googleUser == null) return null;
-      _user = googleUser;
-      log("_user!.displayName");
-      log(_user!.displayName.toString());
-      log(_user!.email.toString());
-      log(_user!.photoUrl.toString());
-      // final googleAuth = await googleUser.authentication;
-      // final AuthCredential credential = GoogleAuthProvider.credential(
-      //   accessToken: googleAuth.accessToken,
-      //   idToken: googleAuth.idToken,
-      // );
-      if (_user != null) {
-        return _user;
-      }
-      return null;
-      /*await FirebaseAuth.instance.signInWithCredential(credential);
-      var auth = FirebaseAuth.instance.currentUser;
-      if (auth != null) {
-        var _token = await SharedPreferences.getInstance();
-        _token.setString("token", auth.uid);
-        _token.setString("email", auth.email ?? "");
-        await addUser(auth);
-        notifyListeners();
-        return true;
-      }
-      return false;*/
-
-    } catch (e) {
-      popup(context, "Ok", title: "Error", description: e.toString());
-      return null;
+  Future<bool?> checkLogin(BuildContext context) async {
+    log("Shared prefrences : ${DataPrefrences.getLogin()}, ${DataPrefrences.getPassword()}");
+    if (DataPrefrences.getLogin().isNotEmpty &&
+        DataPrefrences.getPassword().isNotEmpty) {
+      login(context, DataPrefrences.getLogin(), DataPrefrences.getPassword());
     }
+    return false;
   }
 
-  signUpWithMail(BuildContext context, UserModel user) async {
+  Future<void> removeData() async {
+    await UserService.removeFcm(currentUser!);
+    currentUser = null;
+    DataPrefrences.setLogin("");
+    DataPrefrences.setPassword("");
+  }
+
+  Future<void> logOut(BuildContext context) async {
+    await removeData();
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (_) => const IndexScreen()));
+  }
+
+  UserModel? currentUser;
+
+  Future<void> login(
+      BuildContext context, String email, String password) async {
     isLoading = true;
     notifyListeners();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    try {
-      log("user.toJson(");
-      log(user.toJson());
-      final credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: user.email,
-        password: user.password,
-      );
-      if (credential.user != null) {
-        await addMyUser(credential.user!, user);
-        prefs.setString("password", user.password);
-        prefs.setString("email", user.email);
-        isLoading = false;
-        notifyListeners();
+    // final result = await FirebaseAuth.instance
+    //       .signInWithEmailAndPassword(email: email, password: password);
+
+    var user = await UserService.getUser(email, password);
+    isLoading = false;
+    notifyListeners();
+    if (user != null) {
+      currentUser = user;
+      DataPrefrences.setLogin(email);
+      DataPrefrences.setPassword(password);
+      await UserService.saveFcm(user);
+      log("connected");
+      context.read<UserProvider>().setUser(user);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const PageStructure()));
+    } else {
+      await popup(context, "Ok",
+          title: "Notification",
+          description: "Email ou mot de passe incorrect");
+    }
+  }
+
+  Future<void> signup(BuildContext context, String name, String email,
+      String phoneNumber, String password,
+      {String photo = ""}) async {
+    isLoading = true;
+    notifyListeners();
+
+    isLoading = false;
+    UserModel tempUser = UserModel(
+        fullName: name.trim(),
+        email: email.toString().trim(),
+        phoneNumber: phoneNumber,
+        image: photo,
+        password: password);
+
+    var result = await UserService.addUser(tempUser);
+
+    if (result == "true") {
+      var user = await UserService.getUser(tempUser.email, tempUser.password);
+      if (user != null) {
+        currentUser = user;
+        await UserService.saveFcm(user);
+        DataPrefrences.setLogin(email);
+        DataPrefrences.setPassword(password);
+        context.read<UserProvider>().setUser(user);
         Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginScreen()),
-        );
+            context, MaterialPageRoute(builder: (_) => const PageStructure()));
+      }
+    }
+  }
+
+  Future<void> googleLogIn(BuildContext context) async {
+    var googleUser = await UserService.getGoogleUserInfo(context);
+    if (googleUser != null) {
+      log(googleUser.photoUrl.toString());
+      if (await UserService.checkExistingUser(googleUser.email)) {
+        currentUser = await UserService.getUserByEmail(googleUser.email);
+        DataPrefrences.setLogin(currentUser!.email);
+        DataPrefrences.setPassword(currentUser!.password);
+        await UserService.saveFcm(currentUser!);
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => const PageStructure()));
       } else {
-        isLoading = false;
-        notifyListeners();
-        popup(context, "Ok",
-            title: "Error",
-            description: "An error has occurred , Please try again");
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (_) => SignUpScreen(
+                      name: googleUser.displayName ?? "",
+                      email: googleUser.email,
+                      photo: googleUser.photoUrl ?? "",
+                    )));
       }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        isLoading = false;
-        notifyListeners();
-        popup(context, "Ok",
-            title: "Error", description: 'The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        isLoading = false;
-        notifyListeners();
-        popup(context, "Ok",
-            title: "Error", description: 'The password provided is too weak.');
-      }
-    } catch (e) {
-      isLoading = false;
-      notifyListeners();
-      popup(context, "Ok", title: "Error", description: e.toString());
     }
   }
 
-  addMyUser(User? guser, UserModel? user) async {
-    if (user != null && guser != null) {
-      final docUser = FirebaseFirestore.instance.collection("users");
-      final newUser = UserModel(
-          id: guser.uid,
-          email: user.email,
-          fullName: user.fullName,
-          image: guser.photoURL,
-          phoneNumber: user.phoneNumber,
-          password: user.password);
-      await docUser.doc(guser.uid).set(newUser.toMap());
-    }
-  }
-
-  Future<bool> googleLogout() async {
-    try {
-      await googleSignIn.disconnect();
-      await FirebaseAuth.instance.signOut();
-      return true;
-    } on Exception {
-      return false;
-    }
-  }
-
-  Future<bool> checkPassword(String password) async {
-    try {
-      var _token = await SharedPreferences.getInstance();
-      String? sh = _token.getString("password");
-      if (sh == password) {
-        return true;
-      }
-      return false;
-    } catch (e) {
-      return false;
-    }
+  Future<void> updateUser() async {
+    currentUser =
+        await UserService.getUser(currentUser!.email, currentUser!.password);
+    notifyListeners();
   }
 }

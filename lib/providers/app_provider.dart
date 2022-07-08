@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taba3ni/constant/style.dart';
-import 'package:taba3ni/services/local_storage_manager.dart';
+import 'package:taba3ni/services/shared_data.dart';
 
 
 class ThemeNotifier with ChangeNotifier {
@@ -29,7 +30,7 @@ class ThemeNotifier with ChangeNotifier {
     }
     darkMode = value;
     notifyListeners();
-     StorageManager.saveData("darkMode", darkMode);
+     DataPrefrences.setDarkMode(darkMode);
   }
   initTheme(value){
       switch (value) {

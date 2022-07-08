@@ -9,13 +9,17 @@ import 'package:taba3ni/providers/data_provider.dart';
 import 'package:taba3ni/providers/language.dart';
 import 'package:taba3ni/providers/state_provider.dart';
 import 'package:taba3ni/providers/user_provider.dart';
+import 'package:taba3ni/services/shared_data.dart';
 import 'package:taba3ni/views/login/getstarted.dart';
+import 'package:taba3ni/views/login/login.dart';
+import 'package:taba3ni/views/login/signup.dart';
+import 'package:taba3ni/views/page_structure.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await DataPrefrences.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -41,7 +45,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: '/index',
-      routes: {'/index': (context) => const IndexScreen()},
+      routes: {
+        '/index': (context) => const IndexScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/signup': (context) => const SignUpScreen(),
+        '/home': (context) => const PageStructure()
+      },
     );
   }
 }

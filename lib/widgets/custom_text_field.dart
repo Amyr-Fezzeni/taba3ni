@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/widgets/text_widget.dart';
 
@@ -10,6 +11,7 @@ class CustomTextField extends StatefulWidget {
   final String? Function(String?) validator;
   final bool isPassword;
   final TextInputType? keybordType;
+  final List<TextInputFormatter>? inputFormatters;
   const CustomTextField(
       {Key? key,
       required this.hint,
@@ -18,6 +20,7 @@ class CustomTextField extends StatefulWidget {
       this.label,
       this.isPassword = false,
       this.keybordType,
+      this.inputFormatters,
       required this.focus})
       : super(key: key);
 
@@ -80,6 +83,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             onEditingComplete: () {},
             autovalidateMode: AutovalidateMode.onUserInteraction,
             keyboardType: widget.keybordType,
+            inputFormatters: widget.inputFormatters,
             style: text18white,
             obscureText: widget.isPassword,
             decoration: InputDecoration(
@@ -89,9 +93,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
               hintStyle:
                   text18white.copyWith(color: Colors.white.withOpacity(0.4)),
               contentPadding:
-                  const EdgeInsets.only(left: 20, bottom: 8, top: 8),
+                  const EdgeInsets.only(left: 20, bottom: 16, top: 16),
               focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: lightBlueColor, width: 0.5),
+                borderSide: const BorderSide(color: lightBlueColor, width: 1),
                 borderRadius: BorderRadius.circular(10),
               ),
               suffixIcon: isCorrect
@@ -101,12 +105,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     )
                   : const SizedBox(),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: Colors.white.withOpacity(0.1), width: 0.5),
+                borderSide:
+                    BorderSide(color:
+                    isCorrect?
+                    lightBlueColor:
+                     Colors.white.withOpacity(0.3), width: 1),
                 borderRadius: BorderRadius.circular(10),
               ),
               border: OutlineInputBorder(
-                borderSide: const BorderSide(color: lightBlueColor, width: 0.5),
+                borderSide: const BorderSide(color: lightBlueColor, width: 1),
                 borderRadius: BorderRadius.circular(10),
               ),
               errorBorder: OutlineInputBorder(
@@ -124,6 +131,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
               }
               return result;
             },
+          ),
+          const SizedBox(
+            height: 20,
           ),
         ],
       ),

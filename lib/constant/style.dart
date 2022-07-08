@@ -11,7 +11,7 @@ TextStyle text18black = GoogleFonts.nunito(color: Colors.black87, fontSize: 18);
 TextStyle text18white = GoogleFonts.nunito(color: Colors.white, fontSize: 18);
 TextStyle titleBlue = GoogleFonts.nunito(color: lightBlueColor, fontSize: 22);
 TextStyle titleWhite = GoogleFonts.nunito(
-    color: Colors.white, fontSize: 30, fontWeight: FontWeight.w800);
+    color: Colors.white, fontSize: 35, fontWeight: FontWeight.w800);
 TextStyle titleblack = GoogleFonts.nunito(color: Colors.black, fontSize: 22);
 
 ThemeData darkTheme = ThemeData(

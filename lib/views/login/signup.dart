@@ -1,14 +1,27 @@
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/style.dart';
+import 'package:taba3ni/providers/auth_provider.dart';
+import 'package:taba3ni/services/user_service.dart';
+import 'package:taba3ni/views/login/login.dart';
+import 'package:taba3ni/views/login/validator.dart';
 import 'package:taba3ni/widgets/custom_text_field.dart';
 import 'package:taba3ni/widgets/primary_btn.dart';
 import 'package:taba3ni/widgets/text_widget.dart';
 import 'package:taba3ni/widgets/transparent_btn.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  final String email;
+  final String name;
+  final String photo;
+  const SignUpScreen(
+      {Key? key, this.email = "", this.name = "", this.photo = ""})
+      : super(key: key);
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -16,17 +29,28 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final formkey = GlobalKey<FormState>();
+  late TextEditingController nameController;
+  late TextEditingController phoneController;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController();
+    emailController = TextEditingController();
+    phoneController = TextEditingController();
+    passwordController = TextEditingController();
+    Future.delayed(const Duration(milliseconds: 50)).then((value) {
+      setState(() {
+        nameController.text = widget.name;
+        emailController.text = widget.email;
+      });
+    });
+  }
 
-  TextEditingController emailController = TextEditingController();
-
-  TextEditingController passwordController = TextEditingController();
-
-  bool emailCorrect = false;
-
-  bool passwordCorrect = false;
-
+  FocusNode nameFocus = FocusNode();
+  FocusNode phoneFocus = FocusNode();
   FocusNode emailFocus = FocusNode();
-
   FocusNode passwordFocus = FocusNode();
 
   @override
@@ -44,43 +68,51 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Form(
           key: formkey,
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                     padding: const EdgeInsets.only(top: 50, left: 20),
-                    child: Txt(text: "Log in", style: titleWhite)),
+                    child: Txt(text: "Sign up", style: titleWhite)),
                 SizedBox(
-                  height: size.height * 0.1,
+                  height: size.height * 0.05,
                 ),
                 CustomTextField(
-                  hint: "Email",
+                  hint: "Oliver Cydric",
+                  controller: nameController,
+                  validator: nameValidator,
+                  focus: nameFocus,
+                  label: "Name",
+                  keybordType: TextInputType.name,
+                ),
+                CustomTextField(
+                  hint: "exemple@email.com",
                   controller: emailController,
-                  validator: (value) {
-                    bool emailValid = RegExp(
-                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                        .hasMatch(value ?? " ");
-                    return !emailValid ? '' : null;
-                  },
+                  validator: emailValidator,
                   focus: emailFocus,
                   keybordType: TextInputType.emailAddress,
                   label: "Email",
                 ),
-                const SizedBox(
-                  height: 20,
+                CustomTextField(
+                  hint: "55 555 555",
+                  controller: phoneController,
+                  validator: phoneNumberValidator,
+                  focus: phoneFocus,
+                  label: "Phone",
+                  keybordType: TextInputType.phone,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 ),
                 CustomTextField(
                   hint: "Password",
                   controller: passwordController,
-                  validator: (value) {
-                    return value.toString().length > 6 ? null : "";
-                  },
+                  validator: passwordValidator,
                   focus: passwordFocus,
                   label: "Password",
                   isPassword: true,
                 ),
                 SizedBox(
-                  height: size.height * 0.15,
+                  height: size.height * 0.05,
                 ),
                 Center(
                   child: Padding(
@@ -90,7 +122,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         height: 50,
                         width: 200,
                         widget: Txt(
-                            text: "Log in",
+                            text: "SignUp",
                             style: text18black.copyWith(
                                 fontWeight: FontWeight.w800,
                                 color: darkBgColor.withOpacity(0.8))),
@@ -103,88 +135,89 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             lightBlueColor,
                           ],
                         ),
-                        function: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const SignUpScreen()),
-                            )),
+                        function: () async {
+                          if (formkey.currentState != null &&
+                              formkey.currentState!.validate()) {
+                            await context.read<AuthProvider>().signup(
+                                context,
+                                nameController.text,
+                                emailController.text,
+                                phoneController.text,
+                                passwordController.text,
+                                photo: widget.photo);
+                          }
+                        }),
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.1,
+                ),
+                Center(
+                    child: Txt(
+                        text: 'Or signup with one of the following options',
+                        style: text18white.copyWith(
+                            fontSize: 16, color: Colors.white70))),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      transparentButton(
+                          context: context,
+                          height: 60,
+                          width: 150,
+                          widget: SvgPicture.asset("assets/images/google.svg",
+                              height: 30, width: 30, color: Colors.white),
+                          border: Border.all(
+                              color: Colors.white.withOpacity(0.2), width: 1),
+                          borderRadius: BorderRadius.circular(18),
+                          function: () async {
+                            final user =
+                                await UserService.getGoogleUserInfo(context);
+                            if (user != null) {
+                              nameController.text = user.displayName ?? "";
+                              emailController.text = user.email;
+                            }
+                          }),
+                      transparentButton(
+                        context: context,
+                        height: 60,
+                        width: 150,
+                        widget: SvgPicture.asset(
+                          "assets/images/facebook.svg",
+                          width: 30,
+                          height: 30,
+                          color: Colors.white,
+                        ),
+                        border: Border.all(
+                            color: Colors.white.withOpacity(0.2), width: 1),
+                        borderRadius: BorderRadius.circular(18),
+                        function: () => log("login with Facebook"),
+                      )
+                    ],
                   ),
                 ),
                 Center(
                     child: Padding(
-                  padding: const EdgeInsets.only(top: 40.0),
-                  child: Txt(
-                      text: 'Or login with one of the following options',
-                      style: text18white.copyWith(color: Colors.white70)),
-                )),
-                Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        transparentButton(
-                            context: context,
-                            height: 50,
-                            width: 150,
-                            widget: SvgPicture.asset("assets/images/google.svg",
-                                height: 30, width: 30, color: Colors.white),
-                            border: Border.all(
-                                color: Colors.white.withOpacity(0.2),
-                                width: 0.5),
-                            borderRadius: BorderRadius.circular(10),
-                            function: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SignUpScreen()),
-                                )),
-                        transparentButton(
-                            context: context,
-                            height: 50,
-                            width: 150,
-                            widget: SvgPicture.asset(
-                              "assets/images/facebook.svg",
-                              width: 30,
-                              height: 30,
-                              color: Colors.white,
-                            ),
-                            border: Border.all(
-                                color: Colors.white.withOpacity(0.2),
-                                width: 0.5),
-                            borderRadius: BorderRadius.circular(10),
-                            function: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SignUpScreen()),
-                                ))
-                      ],
-                    ),
-                  ),
-                ),
-                Center(
-                    child: Padding(
-                  padding: const EdgeInsets.only(top: 15),
+                  padding: const EdgeInsets.only(top: 20),
                   child: RichText(
                     text: TextSpan(
                       children: <TextSpan>[
                         TextSpan(
-                            text: 'You don' "t have an account ",
+                            text: "Already have an account ?  ",
                             style: text18white),
                         TextSpan(
-                            text: 'Sign up',
+                            text: 'Log in',
                             style: text18white.copyWith(
                               color: lightBlueColor,
                               fontWeight: FontWeight.w800,
                             ),
                             recognizer: TapGestureRecognizer()
-                              ..onTap = () => Navigator.push(
+                              ..onTap = () => Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const SignUpScreen()),
+                                            const LoginScreen()),
                                   )),
                       ],
                     ),
