@@ -87,11 +87,12 @@ class ProfileScreen extends StatelessWidget {
                                 children: [
                                   Txt(
                                       text: user.followed.length.toString(),
-                                      style: style.text18),
+                                      style: style.text18
+                                          .copyWith(color: Colors.white38)),
                                   Txt(
                                       text: "Connections",
                                       style: style.text18.copyWith(
-                                          fontSize: 15, color: Colors.white38)),
+                                          fontSize: 15, color: Colors.white70)),
                                 ],
                               ),
                               Column(
@@ -100,7 +101,8 @@ class ProfileScreen extends StatelessWidget {
                                   Txt(
                                       text:
                                           user.sharedLocation.length.toString(),
-                                      style: style.text18),
+                                      style: style.text18
+                                          .copyWith(color: Colors.white70)),
                                   Txt(
                                       text: "Favorites",
                                       style: style.text18.copyWith(
@@ -146,11 +148,11 @@ class ProfileScreen extends StatelessWidget {
                           children: [
                             Text(
                               "Name :",
-                              style: textbody1,
+                              style: style.text18,
                             ),
                             Text(
                               user.fullName,
-                              style: textbody1,
+                              style: style.text18,
                             ),
                           ],
                         ),
@@ -164,11 +166,11 @@ class ProfileScreen extends StatelessWidget {
                           children: [
                             Text(
                               "Email :",
-                              style: textbody1,
+                              style: style.text18,
                             ),
                             Text(
                               user.email,
-                              style: textbody1,
+                              style: style.text18,
                             ),
                           ],
                         ),
@@ -182,11 +184,11 @@ class ProfileScreen extends StatelessWidget {
                           children: [
                             Text(
                               "Phone number :",
-                              style: textbody1,
+                              style: style.text18,
                             ),
                             Text(
                               user.phoneNumber,
-                              style: textbody1,
+                              style: style.text18,
                             ),
                           ],
                         ),

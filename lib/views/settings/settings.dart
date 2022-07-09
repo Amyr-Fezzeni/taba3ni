@@ -60,11 +60,11 @@ class SettingsScreen extends StatelessWidget {
                     children: [
                       Text(
                         "Name :",
-                        style: textbody1,
+                        style: style.text18,
                       ),
                       Text(
                         user.fullName,
-                        style: textbody1,
+                        style: style.text18,
                       ),
                     ],
                   ),
@@ -82,11 +82,11 @@ class SettingsScreen extends StatelessWidget {
                     children: [
                       Text(
                         "Email :",
-                        style: textbody1,
+                        style: style.text18,
                       ),
                       Text(
                         user.email,
-                        style: textbody1,
+                        style: style.text18,
                       ),
                     ],
                   ),
@@ -104,7 +104,7 @@ class SettingsScreen extends StatelessWidget {
                     children: [
                       Text(
                         "Phone number :",
-                        style: textbody1,
+                        style: style.text18,
                       ),
                       TextButton(
                           onPressed: () async {
@@ -142,12 +142,14 @@ class SettingsScreen extends StatelessWidget {
                     children: [
                       Text(
                         "Dark mode :",
-                        style: textbody1,
+                        style: style.text18,
                       ),
                       CupertinoSwitch(
                           activeColor: primaryColor,
                           value: style.darkMode,
-                          onChanged: (value) => context.read<ThemeNotifier>().changeDarkMode(value)),
+                          onChanged: (value) => context
+                              .read<ThemeNotifier>()
+                              .changeDarkMode(value)),
                     ],
                   ),
                 ),
@@ -164,7 +166,7 @@ class SettingsScreen extends StatelessWidget {
                     children: [
                       Text(
                         "Password :",
-                        style: textbody1,
+                        style: style.text18,
                       ),
                       TextButton(
                           onPressed: () async {

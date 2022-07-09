@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Padding(
                     padding: const EdgeInsets.only(top: 50, left: 20),
-                    child: Txt(text: "Log in", style: titleWhite)),
+                    child: Txt(text: "Log in", style: style.title)),
                 SizedBox(
                   height: size.height * 0.1,
                 ),
@@ -94,16 +94,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 text: "Log in",
                                 style: text18black.copyWith(
                                     fontWeight: FontWeight.w800,
-                                    color: style.bgColor.withOpacity(0.8))),
+                                    color: lightBgColor.withOpacity(0.8))),
                         borderRadius: BorderRadius.circular(30),
-                        gradient: const LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                          colors: [
-                            lightOrange,
-                            lightBlueColor,
-                          ],
-                        ),
                         function: () => context.read<AuthProvider>().login(
                             context,
                             emailController.text,
@@ -116,8 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Center(
                     child: Txt(
                         text: 'Or login with one of the following options',
-                        style: text18white.copyWith(
-                            fontSize: 16, color: Colors.white70))),
+                        style: style.text18.copyWith(fontSize: 16))),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Row(
@@ -128,9 +119,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 60,
                         width: 150,
                         widget: SvgPicture.asset("assets/images/google.svg",
-                            height: 30, width: 30, color: Colors.white),
+                            height: 30, width: 30, color: style.invertedColor),
                         border: Border.all(
-                            color: Colors.white.withOpacity(0.2), width: 1),
+                            color: style.invertedColor.withOpacity(0.4),
+                            width: 1),
                         borderRadius: BorderRadius.circular(18),
                         function: () =>
                             context.read<AuthProvider>().googleLogIn(context),
@@ -143,10 +135,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           "assets/images/facebook.svg",
                           width: 30,
                           height: 30,
-                          color: Colors.white,
+                          color: style.invertedColor,
                         ),
                         border: Border.all(
-                            color: Colors.white.withOpacity(0.2), width: 1),
+                            color: style.invertedColor.withOpacity(0.4),
+                            width: 1),
                         borderRadius: BorderRadius.circular(18),
                         function: () => log("login with Facebook"),
                       )
@@ -161,11 +154,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: <TextSpan>[
                         TextSpan(
                             text: "You don't have an account ?  ",
-                            style: text18white),
+                            style: style.text18),
                         TextSpan(
                             text: 'Sign up',
                             style: text18white.copyWith(
-                              color: lightBlueColor,
+                              color: style.btnColor,
                               fontWeight: FontWeight.w800,
                             ),
                             recognizer: TapGestureRecognizer()

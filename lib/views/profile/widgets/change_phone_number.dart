@@ -46,7 +46,7 @@ class _ChangePhoneNumberState extends State<ChangePhoneNumber> {
           children: [
             Text(
               "Change Phone Number".toUpperCase(),
-              style: title.copyWith(color: Colors.white70, fontSize: 25),
+              style: style.title.copyWith(fontSize: 25),
             ),
             const SizedBox(
               height: 30,
@@ -68,7 +68,7 @@ class _ChangePhoneNumberState extends State<ChangePhoneNumber> {
                   width: size.width * 0.4,
                   child: Text(
                     "Old phone number : ",
-                    style: textbody1,
+                    style: style.text18,
                   ),
                 ),
                 SizedBox(
@@ -76,7 +76,7 @@ class _ChangePhoneNumberState extends State<ChangePhoneNumber> {
                   height: 40,
                   child: CupertinoTextField(
                     controller: phone,
-                    style: textbody1,
+                    style: style.text18,
                     textAlign: TextAlign.center,
                     padding: const EdgeInsets.only(top: 10),
                     decoration: BoxDecoration(
@@ -97,7 +97,7 @@ class _ChangePhoneNumberState extends State<ChangePhoneNumber> {
                   width: size.width * 0.4,
                   child: Text(
                     "New phone number : ",
-                    style: textbody1,
+                    style: style.text18,
                   ),
                 ),
                 SizedBox(
@@ -105,7 +105,7 @@ class _ChangePhoneNumberState extends State<ChangePhoneNumber> {
                   height: 40,
                   child: CupertinoTextField(
                     controller: newPhone,
-                    style: textbody1,
+                    style: style.text18,
                     textAlign: TextAlign.center,
                     padding: const EdgeInsets.only(top: 10),
                     keyboardType: TextInputType.number,
@@ -136,7 +136,7 @@ class _ChangePhoneNumberState extends State<ChangePhoneNumber> {
                     child: Center(
                       child: Text(
                         "Update Phone number",
-                        style: textbody1,
+                        style: style.text18,
                       ),
                     ),
                   )),

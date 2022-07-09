@@ -49,10 +49,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         emailController.text = widget.email;
       });
     });
-    
+
     photo = widget.photo;
-    log("photo:"+photo);
-    
+    log("photo:" + photo);
   }
 
   FocusNode nameFocus = FocusNode();
@@ -82,7 +81,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: [
                 Padding(
                     padding: const EdgeInsets.only(top: 50, left: 20),
-                    child: Txt(text: "Sign up", style: titleWhite)),
+                    child: Txt(text: "Sign up", style: style.title)),
                 SizedBox(
                   height: size.height * 0.05,
                 ),
@@ -119,12 +118,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   label: "Password",
                   isPassword: true,
                 ),
-                SizedBox(
-                  height: size.height * 0.05,
-                ),
                 Center(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 15.0),
+                    padding: const EdgeInsets.only(top: 40.0),
                     child: primaryButton(
                         context: context,
                         height: 50,
@@ -133,16 +129,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             text: "SignUp",
                             style: text18black.copyWith(
                                 fontWeight: FontWeight.w800,
-                                color: style.bgColor.withOpacity(0.8))),
+                                color: lightBgColor.withOpacity(0.8))),
                         borderRadius: BorderRadius.circular(30),
-                        gradient: const LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                          colors: [
-                            lightOrange,
-                            lightBlueColor,
-                          ],
-                        ),
                         function: () async {
                           if (formkey.currentState != null &&
                               formkey.currentState!.validate()) {
@@ -158,13 +146,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: size.height * 0.1,
+                  height: size.height * 0.05,
                 ),
                 Center(
                     child: Txt(
                         text: 'Or signup with one of the following options',
-                        style: text18white.copyWith(
-                            fontSize: 16, color: Colors.white70))),
+                        style: style.text18.copyWith(fontSize: 16))),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Row(
@@ -175,9 +162,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           height: 60,
                           width: 150,
                           widget: SvgPicture.asset("assets/images/google.svg",
-                              height: 30, width: 30, color: Colors.white),
+                              height: 30,
+                              width: 30,
+                              color: style.invertedColor),
                           border: Border.all(
-                              color: Colors.white.withOpacity(0.2), width: 1),
+                              color: style.invertedColor.withOpacity(0.4),
+                              width: 1),
                           borderRadius: BorderRadius.circular(18),
                           function: () async {
                             final user =
@@ -196,10 +186,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           "assets/images/facebook.svg",
                           width: 30,
                           height: 30,
-                          color: Colors.white,
+                          color: style.invertedColor,
                         ),
                         border: Border.all(
-                            color: Colors.white.withOpacity(0.2), width: 1),
+                            color: style.invertedColor.withOpacity(0.4),
+                            width: 1),
                         borderRadius: BorderRadius.circular(18),
                         function: () => log("login with Facebook"),
                       )
@@ -214,11 +205,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       children: <TextSpan>[
                         TextSpan(
                             text: "Already have an account ?  ",
-                            style: text18white),
+                            style: style.text18),
                         TextSpan(
                             text: 'Log in',
-                            style: text18white.copyWith(
-                              color: lightBlueColor,
+                            style: style.text18.copyWith(
+                              color: style.btnColor,
                               fontWeight: FontWeight.w800,
                             ),
                             recognizer: TapGestureRecognizer()

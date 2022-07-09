@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/widgets/text_widget.dart';
+
+import '../providers/app_provider.dart';
 
 class CustomTextField extends StatefulWidget {
   final String hint;
@@ -56,6 +59,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
+    var style = context.watch<ThemeNotifier>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
@@ -64,9 +68,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
           if (widget.label != null)
             Txt(
                 text: widget.label!,
-                style: text18white.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white.withOpacity(0.9))),
+                style: style.text18.copyWith(
+                  fontWeight: FontWeight.w600,
+                )),
           const SizedBox(
             height: 5,
           ),
@@ -84,14 +88,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             keyboardType: widget.keybordType,
             inputFormatters: widget.inputFormatters,
-            style: text18white,
+            style: style.text18,
             obscureText: widget.isPassword,
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.white.withOpacity(0.1),
               hintText: widget.hint,
-              hintStyle:
-                  text18white.copyWith(color: Colors.white.withOpacity(0.4)),
+              hintStyle: style.text18
+                  .copyWith(color: style.invertedColor.withOpacity(0.4)),
               contentPadding:
                   const EdgeInsets.only(left: 20, bottom: 16, top: 16),
               focusedBorder: OutlineInputBorder(
@@ -99,17 +103,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 borderRadius: BorderRadius.circular(10),
               ),
               suffixIcon: isCorrect
-                  ? const Icon(
+                  ? Icon(
                       Icons.check,
-                      color: Colors.white,
+                      color: style.invertedColor,
                     )
                   : const SizedBox(),
               enabledBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color:
-                    isCorrect?
-                    lightBlueColor:
-                     Colors.white.withOpacity(0.3), width: 1),
+                borderSide: BorderSide(
+                    color: isCorrect
+                        ? lightBlueColor
+                        : style.invertedColor.withOpacity(0.3),
+                    width: 1),
                 borderRadius: BorderRadius.circular(10),
               ),
               border: OutlineInputBorder(
@@ -117,10 +121,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 borderRadius: BorderRadius.circular(10),
               ),
               errorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: lightOrange, width: 0.5),
+                borderSide: const BorderSide(color: Colors.redAccent, width: 1),
                 borderRadius: BorderRadius.circular(10),
               ),
-              errorStyle: text18white.copyWith(fontSize: 14, color: Colors.red),
+              errorStyle: text18white.copyWith(fontSize: 14, color: Colors.redAccent),
             ),
             validator: (val) {
               var result = widget.validator(val);

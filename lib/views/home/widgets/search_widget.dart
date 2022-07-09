@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/const.dart';
+import 'package:taba3ni/providers/app_provider.dart';
 import 'package:taba3ni/providers/data_provider.dart';
 
 class SearchWidget extends StatefulWidget {
@@ -14,6 +15,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    var style = context.watch<ThemeNotifier>();
     return Container(
       margin: EdgeInsets.only(top: size.width * 0.09),
       width: size.width * 0.9,
@@ -25,34 +27,39 @@ class _SearchWidgetState extends State<SearchWidget> {
           onChanged: (String value) =>
               context.read<DataProvider>().updateSearch(value),
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          style: textbody1,
+          style: style.text18,
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white.withOpacity(0.05),
             hintText: "Search...",
-            hintStyle: textbody1,
+            hintStyle: style.text18,
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             focusedBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: primaryColor, width: 1),
               borderRadius: BorderRadius.circular(12),
             ),
-            prefixIcon: const Icon(
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: style.invertedColor.withOpacity(0.2), width: 1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            prefixIcon: Icon(
               Icons.search,
-              color: Colors.white60,
+              color: style.invertedColor,
             ),
             suffixIcon: context.watch<DataProvider>().search.isNotEmpty
                 ? InkWell(
                     onTap: () =>
                         context.read<DataProvider>().clearSearch(context),
-                    child: const Icon(
+                    child: Icon(
                       Icons.close,
-                      color: Colors.white60,
+                      color: style.invertedColor,
                     ),
                   )
                 : null,
             border: OutlineInputBorder(
-              borderSide: BorderSide.none,
+              borderSide: BorderSide(color: style.invertedColor, width: 0.5),
               borderRadius: BorderRadius.circular(12),
             ),
           ),

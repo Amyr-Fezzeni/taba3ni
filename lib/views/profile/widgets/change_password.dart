@@ -45,7 +45,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           children: [
             Text(
               "Change password".toUpperCase(),
-              style: title.copyWith(color: Colors.white70),
+              style: style.title,
             ),
             const SizedBox(
               height: 30,
@@ -67,7 +67,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   width: size.width * 0.3,
                   child: Text(
                     "Old password : ",
-                    style: textbody1,
+                    style: style.text18,
                   ),
                 ),
                 SizedBox(
@@ -75,7 +75,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   height: 40,
                   child: CupertinoTextField(
                     controller: oldPassword,
-                    style: textbody1,
+                    style: style.text18,
                     obscureText: isObscureOld,
                     decoration: BoxDecoration(
                         color: style.bgColor,
@@ -105,7 +105,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   width: size.width * 0.3,
                   child: Text(
                     "New password : ",
-                    style: textbody1,
+                    style: style.text18,
                   ),
                 ),
                 SizedBox(
@@ -113,7 +113,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   height: 40,
                   child: CupertinoTextField(
                     controller: newPassword,
-                    style: textbody1,
+                    style: style.text18,
                     obscureText: isObscure,
                     decoration: BoxDecoration(
                         color: style.bgColor,
@@ -141,7 +141,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   width: size.width * 0.3,
                   child: Text(
                     "Confirm new password : ",
-                    style: textbody1,
+                    style: style.text18,
                   ),
                 ),
                 SizedBox(
@@ -149,7 +149,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   height: 40,
                   child: CupertinoTextField(
                     controller: newPasswordConfirmed,
-                    style: textbody1,
+                    style: style.text18,
                     obscureText: isObscureConfirmed,
                     decoration: BoxDecoration(
                         color: style.bgColor,
@@ -186,7 +186,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     child: Center(
                       child: Text(
                         "Change password",
-                        style: textbody1,
+                        style: style.text18,
                       ),
                     ),
                   )),

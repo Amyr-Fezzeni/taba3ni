@@ -2,7 +2,8 @@ import 'dart:developer';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:taba3ni/constant/const.dart';
+import 'package:provider/provider.dart';
+import 'package:taba3ni/providers/app_provider.dart';
 
 class EmergencyWidget extends StatefulWidget {
   const EmergencyWidget({Key? key}) : super(key: key);
@@ -37,22 +38,23 @@ class _EmergencyWidgetState extends State<EmergencyWidget> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    var style = context.watch<ThemeNotifier>();
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 20,
       ),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20, bottom: 10),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Emergency",
-                style: textbody1.copyWith(fontSize: 30),
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 20, bottom: 10),
+          //   child: Align(
+          //     alignment: Alignment.centerLeft,
+          //     child: Text(
+          //       "Emergency",
+          //       style: style.title.copyWith(fontSize: 27),
+          //     ),
+          //   ),
+          // ),
           CarouselSlider(
             items: pubs
                 .map((pub) => Container(

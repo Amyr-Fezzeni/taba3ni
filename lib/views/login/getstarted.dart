@@ -39,7 +39,7 @@ class IndexScreen extends StatelessWidget {
                 SizedBox(
                   height: size.height * 0.15,
                 ),
-                Txt(text: "Feel safe with us", style: titleWhite),
+                Txt(text: "Feel safe with us", style: style.title),
                 Padding(
                   padding: EdgeInsets.only(top: size.height * 0.07),
                   child: primaryButton(
@@ -48,10 +48,11 @@ class IndexScreen extends StatelessWidget {
                       width: 260,
                       widget: Txt(
                           text: "Get started",
-                          style: text18black.copyWith(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 20,
-                              color: style.bgColor)),
+                          style: style.text18.copyWith(
+                            fontWeight: FontWeight.w800,
+                            color: lightBgColor,
+                            fontSize: 20,
+                          )),
                       borderRadius: BorderRadius.circular(30),
                       function: () => Navigator.push(
                             context,
@@ -66,12 +67,12 @@ class IndexScreen extends StatelessWidget {
                       children: <TextSpan>[
                         TextSpan(
                             text: 'Already have an account ?  ',
-                            style: text18white.copyWith(fontSize: 16)),
+                            style: style.text18.copyWith(fontSize: 16)),
                         TextSpan(
                             text: 'Log in',
-                            style: text18white.copyWith(
+                            style: style.text18.copyWith(
                               fontSize: 16,
-                              color: lightBlueColor,
+                              color: style.btnColor,
                               fontWeight: FontWeight.w800,
                             ),
                             recognizer: TapGestureRecognizer()
