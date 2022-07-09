@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/const.dart';
 import 'package:taba3ni/views/login/validator.dart';
+
+import '../../../providers/app_provider.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({Key? key}) : super(key: key);
@@ -25,14 +28,15 @@ class _ChangePasswordState extends State<ChangePassword> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    var style = context.watch<ThemeNotifier>();
     return DraggableScrollableSheet(
       initialChildSize: MediaQuery.of(context).viewInsets.bottom > 0 ? 1 : 0.7,
       expand: false,
       builder: (_, controller) => Container(
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-          color: bgColor,
+          color: style.bgColor,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         child: Center(
@@ -74,7 +78,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     style: textbody1,
                     obscureText: isObscureOld,
                     decoration: BoxDecoration(
-                        color: bgColor,
+                        color: style.bgColor,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: primaryColor, width: 1)),
                     suffix: IconButton(
@@ -112,7 +116,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     style: textbody1,
                     obscureText: isObscure,
                     decoration: BoxDecoration(
-                        color: bgColor,
+                        color: style.bgColor,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: primaryColor, width: 1)),
                     suffix: IconButton(
@@ -148,7 +152,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     style: textbody1,
                     obscureText: isObscureConfirmed,
                     decoration: BoxDecoration(
-                        color: bgColor,
+                        color: style.bgColor,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: primaryColor, width: 1)),
                     suffix: IconButton(

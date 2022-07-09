@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/style.dart';
+import 'package:taba3ni/providers/app_provider.dart';
 import 'package:taba3ni/providers/auth_provider.dart';
 import 'package:taba3ni/views/login/signup.dart';
 import 'package:taba3ni/views/login/validator.dart';
@@ -33,8 +34,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     // var lang = context.read<LanguageProvider>();
     var size = MediaQuery.of(context).size;
+    var style = context.watch<ThemeNotifier>();
     return Scaffold(
-      backgroundColor: darkBgColor,
+      backgroundColor: style.bgColor,
       body: GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
@@ -92,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 text: "Log in",
                                 style: text18black.copyWith(
                                     fontWeight: FontWeight.w800,
-                                    color: darkBgColor.withOpacity(0.8))),
+                                    color: style.bgColor.withOpacity(0.8))),
                         borderRadius: BorderRadius.circular(30),
                         gradient: const LinearGradient(
                           begin: Alignment.topRight,

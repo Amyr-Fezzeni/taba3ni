@@ -10,6 +10,7 @@ import 'package:taba3ni/views/profile/widgets/change_phone_number.dart';
 import 'package:taba3ni/widgets/primary_btn.dart';
 import 'package:taba3ni/widgets/text_widget.dart';
 
+import '../../providers/app_provider.dart';
 import '../../widgets/popup.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -18,13 +19,14 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = context.watch<UserProvider>().currentUser;
+    var style = context.watch<ThemeNotifier>();
     return Scaffold(
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Container(
           height: MediaQuery.of(context).size.height,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-          color: bgColor,
+          color: style.bgColor,
           child: Center(
               child: Column(
             children: [
@@ -32,13 +34,13 @@ class SettingsScreen extends StatelessWidget {
                 backgroundColor: primaryColor,
                 radius: 95,
                 child: user!.image!.toString().isEmpty
-                    ? const CircleAvatar(
-                        backgroundColor: bgColor,
-                        backgroundImage: AssetImage("assets/profile.jpg"),
+                    ? CircleAvatar(
+                        backgroundColor: style.bgColor,
+                        backgroundImage: const AssetImage("assets/profile.jpg"),
                         radius: 90,
                       )
                     : CircleAvatar(
-                        backgroundColor: bgColor,
+                        backgroundColor: style.bgColor,
                         backgroundImage: NetworkImage(user.image!),
                         radius: 90,
                       ),
@@ -47,7 +49,7 @@ class SettingsScreen extends StatelessWidget {
                 height: 20,
               ),
               Card(
-                color: bgColor,
+                color: style.bgColor,
                 elevation: 3,
                 child: Container(
                   height: 50,
@@ -69,7 +71,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
               Card(
-                color: bgColor,
+                color: style.bgColor,
                 elevation: 3,
                 child: Container(
                   height: 50,
@@ -91,7 +93,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
               Card(
-                color: bgColor,
+                color: style.bgColor,
                 elevation: 3,
                 child: Container(
                   height: 50,
@@ -129,7 +131,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
               Card(
-                color: bgColor,
+                color: style.bgColor,
                 elevation: 3,
                 child: Container(
                   height: 50,
@@ -144,14 +146,14 @@ class SettingsScreen extends StatelessWidget {
                       ),
                       CupertinoSwitch(
                           activeColor: primaryColor,
-                          value: true,
-                          onChanged: (value) => false),
+                          value: style.darkMode,
+                          onChanged: (value) => context.read<ThemeNotifier>().changeDarkMode(value)),
                     ],
                   ),
                 ),
               ),
               Card(
-                color: bgColor,
+                color: style.bgColor,
                 elevation: 3,
                 child: Container(
                   height: 50,
@@ -195,7 +197,7 @@ class SettingsScreen extends StatelessWidget {
                       style: text18black.copyWith(
                           fontWeight: FontWeight.w800,
                           fontSize: 20,
-                          color: darkBgColor)),
+                          color: style.bgColor)),
                   borderRadius: BorderRadius.circular(30),
                   function: () async => await popup(context, "Ok",
                       title: "Notification",

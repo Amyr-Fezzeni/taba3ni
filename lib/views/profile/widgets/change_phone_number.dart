@@ -6,6 +6,8 @@ import 'package:taba3ni/constant/const.dart';
 import 'package:taba3ni/providers/user_provider.dart';
 import 'package:taba3ni/views/login/validator.dart';
 
+import '../../../providers/app_provider.dart';
+
 class ChangePhoneNumber extends StatefulWidget {
   const ChangePhoneNumber({Key? key}) : super(key: key);
 
@@ -27,14 +29,15 @@ class _ChangePhoneNumberState extends State<ChangePhoneNumber> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    var style = context.watch<ThemeNotifier>();
     return DraggableScrollableSheet(
       initialChildSize: MediaQuery.of(context).viewInsets.bottom > 0 ? 1 : 0.7,
       expand: false,
       builder: (_, controller) => Container(
-        decoration: const BoxDecoration(
+        decoration:  BoxDecoration(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-          color: bgColor,
+          color: style.bgColor,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         child: Center(
@@ -77,7 +80,7 @@ class _ChangePhoneNumberState extends State<ChangePhoneNumber> {
                     textAlign: TextAlign.center,
                     padding: const EdgeInsets.only(top: 10),
                     decoration: BoxDecoration(
-                        color: bgColor,
+                        color: style.bgColor,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: primaryColor, width: 1)),
                   ),
@@ -109,7 +112,7 @@ class _ChangePhoneNumberState extends State<ChangePhoneNumber> {
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     maxLength: 8,
                     decoration: BoxDecoration(
-                        color: bgColor,
+                        color: style.bgColor,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: primaryColor, width: 1)),
                   ),

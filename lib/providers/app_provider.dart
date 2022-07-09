@@ -8,6 +8,7 @@ class ThemeNotifier with ChangeNotifier {
   TextStyle title = titleblack;
   bool darkMode = false;
   Color btnColor = lightBlueColor;
+  Color invertedColor = darkBgColor;
 
   void changeDarkMode(value) async {
     switch (value) {
@@ -16,12 +17,14 @@ class ThemeNotifier with ChangeNotifier {
         text18 = text18white;
         title = titleWhite;
         btnColor = darkBtnColor;
+        invertedColor = lightBgColor;
         break;
       case false:
         bgColor = lightBgColor;
         text18 = text18black;
         title = titleblack;
         btnColor = lightBlueColor;
+        invertedColor = darkBgColor;
         break;
       default:
         break;
@@ -50,5 +53,4 @@ class ThemeNotifier with ChangeNotifier {
     }
     darkMode = value;
   }
-
 }

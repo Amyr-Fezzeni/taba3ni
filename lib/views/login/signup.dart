@@ -15,6 +15,8 @@ import 'package:taba3ni/widgets/primary_btn.dart';
 import 'package:taba3ni/widgets/text_widget.dart';
 import 'package:taba3ni/widgets/transparent_btn.dart';
 
+import '../../providers/app_provider.dart';
+
 class SignUpScreen extends StatefulWidget {
   final String email;
   final String name;
@@ -61,8 +63,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    var style = context.watch<ThemeNotifier>();
     return Scaffold(
-      backgroundColor: darkBgColor,
+      backgroundColor: style.bgColor,
       body: GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
@@ -130,7 +133,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             text: "SignUp",
                             style: text18black.copyWith(
                                 fontWeight: FontWeight.w800,
-                                color: darkBgColor.withOpacity(0.8))),
+                                color: style.bgColor.withOpacity(0.8))),
                         borderRadius: BorderRadius.circular(30),
                         gradient: const LinearGradient(
                           begin: Alignment.topRight,
