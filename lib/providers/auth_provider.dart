@@ -17,33 +17,32 @@ class AuthProvider with ChangeNotifier {
   GoogleSignInAccount? googleUser;
   GoogleSignInAccount get user => googleUser!;
   bool isLoading = false;
+  UserModel? currentUser;
 
   Future<bool> checkLogin(BuildContext context) async {
-    await Future.delayed(const Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 50));
     log("Shared prefrences : ${DataPrefrences.getLogin()}, ${DataPrefrences.getPassword()}");
     if (DataPrefrences.getLogin().isNotEmpty &&
         DataPrefrences.getPassword().isNotEmpty) {
-      await login(
-          context, DataPrefrences.getLogin(), DataPrefrences.getPassword());
+      login(context, DataPrefrences.getLogin(), DataPrefrences.getPassword());
       return true;
     }
     return false;
   }
 
-  Future<void> removeData() async {
+  Future<void> removeData(BuildContext context) async {
     await UserService.removeFcm(currentUser!);
+    context.read<UserProvider>().remodeData();
     currentUser = null;
     DataPrefrences.setLogin("");
     DataPrefrences.setPassword("");
   }
 
   Future<void> logOut(BuildContext context) async {
-    await removeData();
+    await removeData(context);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const IndexScreen()));
   }
-
-  UserModel? currentUser;
 
   Future<void> login(
       BuildContext context, String email, String password) async {
@@ -53,18 +52,24 @@ class AuthProvider with ChangeNotifier {
     //       .signInWithEmailAndPassword(email: email, password: password);
 
     var user = await UserService.getUser(email, password);
-    isLoading = false;
-    notifyListeners();
+
     if (user != null) {
+      user.location = await UserService.getUserCurrentLocation();
+      await UserService.updateLocation(
+          user, await UserService.getUserCurrentLocation());
       currentUser = user;
       DataPrefrences.setLogin(email);
       DataPrefrences.setPassword(password);
       await UserService.saveFcm(user);
       log("connected");
       context.read<UserProvider>().setUser(user);
+      isLoading = false;
+      notifyListeners();
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => const PageStructure()));
     } else {
+      isLoading = false;
+      notifyListeners();
       await popup(context, "Ok",
           title: "Notification",
           description: "Email ou mot de passe incorrect");
@@ -87,8 +92,7 @@ class AuthProvider with ChangeNotifier {
         baned: [],
         followed: [],
         requested: [],
-        sharedLocation: []
-        );
+        sharedLocation: []);
 
     var result = await UserService.addUser(tempUser);
 
@@ -96,7 +100,7 @@ class AuthProvider with ChangeNotifier {
       var user = await UserService.getUser(tempUser.email, tempUser.password);
       if (user != null) {
         currentUser = user;
-        await UserService.saveFcm(user);
+        UserService.saveFcm(user);
         DataPrefrences.setLogin(email);
         DataPrefrences.setPassword(password);
         context.read<UserProvider>().setUser(user);
@@ -112,6 +116,7 @@ class AuthProvider with ChangeNotifier {
       log(googleUser.photoUrl.toString());
       if (await UserService.checkExistingUser(googleUser.email)) {
         currentUser = await UserService.getUserByEmail(googleUser.email);
+        context.read<UserProvider>().setUser(currentUser!);
         DataPrefrences.setLogin(currentUser!.email);
         DataPrefrences.setPassword(currentUser!.password);
         await UserService.saveFcm(currentUser!);
@@ -128,11 +133,5 @@ class AuthProvider with ChangeNotifier {
                     )));
       }
     }
-  }
-
-  Future<void> updateUser() async {
-    currentUser =
-        await UserService.getUser(currentUser!.email, currentUser!.password);
-    notifyListeners();
   }
 }

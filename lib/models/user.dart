@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:taba3ni/services/logic_service.dart';
 
 class UserModel {
   String? id;
@@ -67,6 +68,7 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     GeoPoint? gPoint = map['location'];
+    
     return UserModel(
       id: map['id'] != null ? map['id'] as String : null,
       fullName: map['fullName'] as String,
@@ -85,10 +87,10 @@ class UserModel {
           : null,
       isLoggedIn: map['isLoggedIn'] as bool,
       locationActivated: map['locationActivated'] as bool,
-      followed: map['followed'],
-      requested: map['requested'],
-      baned: map['baned'],
-      sharedLocation: map['sharedLocation'],
+      followed: getListString(map['followed']),
+      requested: getListString(map['requested']),
+      baned: getListString(map['baned']),
+      sharedLocation: getListString(map['sharedLocation']),
     );
   }
 

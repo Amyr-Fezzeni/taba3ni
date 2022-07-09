@@ -43,7 +43,7 @@ class UserService {
     return false;
   }
 
- static Future<bool> checkExistingPhone(String phone) async {
+  static Future<bool> checkExistingPhone(String phone) async {
     final snapshot =
         await collection.where('phoneNumber', isEqualTo: phone).limit(1).get();
     if (snapshot.docs.isNotEmpty) return true;
@@ -58,6 +58,7 @@ class UserService {
     if (snapshot.docs.isNotEmpty) {
       log(snapshot.docs.first.data().toString());
       UserModel user = UserModel.fromMap(snapshot.docs.first.data());
+
       return user;
     } else {
       return null;
@@ -67,15 +68,17 @@ class UserService {
   static Future<UserModel?> getUserByEmail(String email) async {
     final snapshot = await collection.where('email', isEqualTo: email).get();
     if (snapshot.docs.isNotEmpty) {
-      log(snapshot.docs.first.data().toString());
+      log("by email" + snapshot.docs.first.data().toString());
       UserModel user = UserModel.fromMap(snapshot.docs.first.data());
+
       return user;
     } else {
       return null;
     }
   }
 
-  static Future<GoogleSignInAccount?> getGoogleUserInfo(BuildContext context) async {
+  static Future<GoogleSignInAccount?> getGoogleUserInfo(
+      BuildContext context) async {
     try {
       final googleSignIn = GoogleSignIn();
 
@@ -99,6 +102,16 @@ class UserService {
           .collection("users")
           .doc(user.id)
           .update({"password": user.password});
+      return true;
+    } on Exception {
+      return false;
+    }
+  }
+
+  static Future<bool> updateLocation(UserModel user, LatLng location) async {
+    try {
+      await FirebaseFirestore.instance.collection("users").doc(user.id).update(
+          {"location": GeoPoint(location.latitude, location.longitude)});
       return true;
     } on Exception {
       return false;
@@ -154,30 +167,31 @@ class UserService {
     }
   }
 
-   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllTrackedUser(
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllTrackedUser(
       List<String> listId) {
     return FirebaseFirestore.instance
         .collection("users")
         .where("id", whereIn: listId)
         .snapshots();
   }
+
   static Future<LatLng> getUserCurrentLocation() async {
-     bool serviceEnabled;
-                LocationPermission permission;
-                serviceEnabled = await Geolocator.isLocationServiceEnabled();
-                if (!serviceEnabled) {
-                  return Future.error("service desactivé");
-                }
-                permission = await Geolocator.checkPermission();
-                if (permission == LocationPermission.denied) {
-                  permission = await Geolocator.requestPermission();
-                  if (permission == LocationPermission.always) {
-                    return Future.error("permission");
-                  }
-                }
-                Position pos = await Geolocator.getCurrentPosition();
-                LatLng l = LatLng(pos.latitude, pos.longitude);
-                log(pos.toString());
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error("service desactivé");
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.always) {
+        return Future.error("permission");
+      }
+    }
+    Position pos = await Geolocator.getCurrentPosition();
+    LatLng l = LatLng(pos.latitude, pos.longitude);
+    log(pos.toString());
 
     return l;
   }

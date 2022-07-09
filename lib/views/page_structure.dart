@@ -16,6 +16,13 @@ class PageStructure extends StatefulWidget {
 
 class _PageStructureState extends State<PageStructure> {
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 1))
+        .then((value) => context.read<StateProvider>().changeScreen(0));
+  }
+
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 

@@ -12,3 +12,11 @@ int createUniqueId() {
 String getLastTimeUpdated(DateTime? time) {
   return "now";
 }
+
+List<String> getListString(List<dynamic> data) {
+  List<String> converted = [];
+  for (var item in data) {
+    converted.add(item.toString());
+  }
+  return converted;
+}

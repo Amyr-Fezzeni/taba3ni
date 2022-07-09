@@ -33,6 +33,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   late TextEditingController phoneController;
   late TextEditingController emailController;
   late TextEditingController passwordController;
+  String photo = "";
   @override
   void initState() {
     super.initState();
@@ -46,6 +47,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         emailController.text = widget.email;
       });
     });
+    
+    photo = widget.photo;
+    log("photo:"+photo);
+    
   }
 
   FocusNode nameFocus = FocusNode();
@@ -144,7 +149,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 emailController.text,
                                 phoneController.text,
                                 passwordController.text,
-                                photo: widget.photo);
+                                photo: photo);
                           }
                         }),
                   ),
@@ -177,6 +182,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             if (user != null) {
                               nameController.text = user.displayName ?? "";
                               emailController.text = user.email;
+                              photo = user.photoUrl ?? "";
                             }
                           }),
                       transparentButton(

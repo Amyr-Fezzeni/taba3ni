@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:custom_marker/marker_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -18,7 +20,7 @@ class UserProvider with ChangeNotifier {
 
     BitmapDescriptor networkimage =
         await MarkerIcon.downloadResizePictureCircle(currentUser!.image!,
-            size: 200,
+            size: 150,
             addBorder: true,
             borderColor: primaryColor,
             borderSize: 15);
@@ -54,14 +56,28 @@ class UserProvider with ChangeNotifier {
 
   setUser(UserModel user) async {
     currentUser = user;
+    log("user set done! ${user.email}");
+    notifyListeners();
     currentUser!.location = await UserService.getUserCurrentLocation();
     if (user.id != null) DataPrefrences.setId(user.id!);
     DataPrefrences.setLogin(user.email);
     DataPrefrences.setPassword(user.password);
+
     notifyListeners();
+  }
+
+  remodeData() {
+    currentUser = null;
+    markers = {};
   }
 
   changePassword(BuildContext context, String pass) {}
 
   changePhoneNumber(BuildContext context, String phone) {}
+
+  Future<void> updateUser() async {
+    currentUser =
+        await UserService.getUser(currentUser!.email, currentUser!.password);
+    notifyListeners();
+  }
 }

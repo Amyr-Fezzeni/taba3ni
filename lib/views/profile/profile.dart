@@ -17,7 +17,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.read<UserProvider>().currentUser;
+    final user = context.read<AuthProvider>().currentUser;
     return Scaffold(
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -202,7 +202,6 @@ class ProfileScreen extends StatelessWidget {
                       confirmFunction: () =>
                           context.read<AuthProvider>().logOut(context),
                       description: "Are you sure you want to log out ?")),
-              
             ],
           )),
         ),

@@ -93,7 +93,7 @@ class _EmergencyWidgetState extends State<EmergencyWidget> {
                                   height: 7,
                                 ),
                                 SizedBox(
-                                  width: size.width * 0.7,
+                                  width: size.width * 0.6,
                                   child: Text(
                                     pub.text,
                                     style: Theme.of(context)

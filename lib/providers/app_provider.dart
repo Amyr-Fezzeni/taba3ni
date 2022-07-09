@@ -50,4 +50,5 @@ class ThemeNotifier with ChangeNotifier {
     }
     darkMode = value;
   }
+
 }
