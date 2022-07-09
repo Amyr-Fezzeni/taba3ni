@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:taba3ni/constant/const.dart';
+import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/providers/user_provider.dart';
 import 'package:taba3ni/views/login/validator.dart';
 
@@ -34,8 +34,8 @@ class _ChangePhoneNumberState extends State<ChangePhoneNumber> {
       initialChildSize: MediaQuery.of(context).viewInsets.bottom > 0 ? 1 : 0.7,
       expand: false,
       builder: (_, controller) => Container(
-        decoration:  BoxDecoration(
-          borderRadius: BorderRadius.only(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(30), topRight: Radius.circular(30)),
           color: style.bgColor,
         ),

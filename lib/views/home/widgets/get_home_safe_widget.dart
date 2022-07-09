@@ -14,8 +14,9 @@ class GetHomeWidget extends StatelessWidget {
         height: 100,
         margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12), color: Colors.white),
+        decoration: BoxDecoration(boxShadow: const [
+          BoxShadow(offset: Offset(0, 3), blurRadius: 10, color: Colors.black38)
+        ], borderRadius: BorderRadius.circular(12), color: Colors.white),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [

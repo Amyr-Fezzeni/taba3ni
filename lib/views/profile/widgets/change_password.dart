@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:taba3ni/constant/const.dart';
+import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/views/login/validator.dart';
 
 import '../../../providers/app_provider.dart';

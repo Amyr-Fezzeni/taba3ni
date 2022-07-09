@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:taba3ni/providers/app_provider.dart';
 import 'package:taba3ni/providers/state_provider.dart';
 
 class CustomIconButton extends StatelessWidget {
@@ -14,15 +15,14 @@ class CustomIconButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        // boxShadow: const [
-        //   BoxShadow(color: Color.fromARGB(255, 61, 95, 246), blurRadius: 12)
-        //]
       ),
       child: InkWell(
         onTap: () => context.read<StateProvider>().changeScreen(index),
         child: Icon(
           icon,
-          color: isSelected ? Colors.blue : Colors.white,
+          color: isSelected
+              ? Colors.blue
+              : context.watch<ThemeNotifier>().invertedColor,
         ),
       ),
     );

@@ -2,8 +2,6 @@ import 'dart:developer';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:taba3ni/providers/app_provider.dart';
 
 class EmergencyWidget extends StatefulWidget {
   const EmergencyWidget({Key? key}) : super(key: key);
@@ -38,7 +36,6 @@ class _EmergencyWidgetState extends State<EmergencyWidget> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    var style = context.watch<ThemeNotifier>();
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 20,
@@ -58,8 +55,15 @@ class _EmergencyWidgetState extends State<EmergencyWidget> {
           CarouselSlider(
             items: pubs
                 .map((pub) => Container(
+                      margin: const EdgeInsets.symmetric(vertical: 20),
                       decoration: BoxDecoration(
                           color: Colors.white,
+                          boxShadow: const [
+                            BoxShadow(
+                                offset: Offset(3, 3),
+                                blurRadius: 10,
+                                color: Colors.black38)
+                          ],
                           borderRadius: BorderRadius.circular(20)),
                       child: Container(
                         // width: size.width * 0.7,
@@ -151,7 +155,7 @@ class _EmergencyWidgetState extends State<EmergencyWidget> {
             carouselController: controller,
             options: CarouselOptions(
                 enlargeCenterPage: true,
-                aspectRatio: 18 / 8,
+                aspectRatio: 18 / 9.5,
                 onPageChanged: (index, reason) {
                   setState(() {
                     currentIndex = index;

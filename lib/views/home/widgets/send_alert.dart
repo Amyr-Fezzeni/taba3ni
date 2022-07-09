@@ -15,6 +15,10 @@ class SendAlertWidget extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
+            boxShadow: const [
+              BoxShadow(
+                  offset: Offset(0, 3), blurRadius: 10, color: Colors.black38)
+            ],
             borderRadius: BorderRadius.circular(12),
             color: const Color.fromARGB(255, 131, 0, 0)),
         child: Row(
