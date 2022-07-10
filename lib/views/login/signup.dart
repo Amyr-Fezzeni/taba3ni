@@ -7,7 +7,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/providers/auth_provider.dart';
-import 'package:taba3ni/services/user_service.dart';
 import 'package:taba3ni/views/login/login.dart';
 import 'package:taba3ni/views/login/validator.dart';
 import 'package:taba3ni/widgets/custom_text_field.dart';
@@ -170,8 +169,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               width: 1),
                           borderRadius: BorderRadius.circular(18),
                           function: () async {
-                            final user =
-                                await UserService.getGoogleUserInfo(context);
+                            final user = await context
+                                .read<AuthProvider>()
+                                .googleLogIn(context, true);
                             if (user != null) {
                               nameController.text = user.displayName ?? "";
                               emailController.text = user.email;

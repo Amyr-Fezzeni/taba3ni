@@ -124,8 +124,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: style.invertedColor.withOpacity(0.4),
                             width: 1),
                         borderRadius: BorderRadius.circular(18),
-                        function: () =>
-                            context.read<AuthProvider>().googleLogIn(context),
+                        function: () => context
+                            .read<AuthProvider>()
+                            .googleLogIn(context, false),
                       ),
                       transparentButton(
                         context: context,

@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/providers/auth_provider.dart';
 import 'package:taba3ni/providers/user_provider.dart';
-import 'package:taba3ni/views/profile/widgets/change_password.dart';
-import 'package:taba3ni/views/profile/widgets/change_phone_number.dart';
+import 'package:taba3ni/views/settings/widgets/change_password.dart';
+import 'package:taba3ni/views/settings/widgets/change_phone_number.dart';
 import 'package:taba3ni/widgets/primary_btn.dart';
 import 'package:taba3ni/widgets/text_widget.dart';
 
