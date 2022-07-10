@@ -11,31 +11,24 @@ import 'package:taba3ni/services/user_service.dart';
 
 class UserProvider with ChangeNotifier {
   UserModel? currentUser;
-
+  bool isNotificationOn = true;
   bool isLoading = false;
   Set<Marker> markers = {};
 
   setMarker() async {
-    bool userHasImage = currentUser!.image!.isNotEmpty;
-
-    BitmapDescriptor networkimage =
-        await MarkerIcon.downloadResizePictureCircle(currentUser!.image!,
+    markers = {};
+    BitmapDescriptor icon = currentUser!.image.isNotEmpty
+        ? await MarkerIcon.downloadResizePictureCircle(currentUser!.image,
             size: 150,
             addBorder: true,
             borderColor: primaryColor,
-            borderSize: 15);
-
-    BitmapDescriptor defaultMarker = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(50, 50)),
-      "assets/profile.png",
-    );
-
+            borderSize: 15)
+        : await BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(size: Size(50, 50)),
+            "assets/profile.png",
+          );
     markers.add(Marker(
-      icon: userHasImage
-          ? networkimage
-
-          // ? BitmapDescriptor.fromBytes(dataBytes.buffer.asUint8List())
-          : defaultMarker,
+      icon: icon,
       markerId: MarkerId(currentUser!.id!),
       position: await UserService.getUserCurrentLocation(),
       infoWindow: InfoWindow(
@@ -43,9 +36,10 @@ class UserProvider with ChangeNotifier {
         snippet: getLastTimeUpdated(currentUser!.lastUpdateLocation),
       ),
     ));
-    notifyListeners();
+
     mapController.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: currentUser!.location!, zoom: 15, tilt: 45)));
+    notifyListeners();
   }
 
   late GoogleMapController mapController;

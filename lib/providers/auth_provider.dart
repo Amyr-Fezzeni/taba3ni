@@ -112,6 +112,8 @@ class AuthProvider with ChangeNotifier {
 
   Future<GoogleSignInAccount?> googleLogIn(
       BuildContext context, bool isSignUp) async {
+    isLoading = true;
+    notifyListeners();
     var googleUser = await UserService.getGoogleUserInfo(context);
     if (googleUser != null) {
       log(googleUser.photoUrl.toString());
@@ -121,9 +123,13 @@ class AuthProvider with ChangeNotifier {
         DataPrefrences.setLogin(currentUser!.email);
         DataPrefrences.setPassword(currentUser!.password);
         await UserService.saveFcm(currentUser!);
+        isLoading = false;
+        notifyListeners();
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (_) => const PageStructure()));
       } else {
+        isLoading = false;
+        notifyListeners();
         if (isSignUp) return googleUser;
         Navigator.pushReplacement(
             context,
@@ -135,6 +141,8 @@ class AuthProvider with ChangeNotifier {
                     )));
       }
     }
+    isLoading = false;
+    notifyListeners();
     return null;
   }
 }

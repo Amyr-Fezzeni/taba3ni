@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/views/login/validator.dart';
-
+import 'package:taba3ni/widgets/primary_btn.dart';
+import 'package:taba3ni/widgets/settings_text_field.dart';
+import 'package:taba3ni/widgets/text_widget.dart';
 import '../../../providers/app_provider.dart';
 
 class ChangePassword extends StatefulWidget {
@@ -20,17 +21,16 @@ class _ChangePasswordState extends State<ChangePassword> {
   bool isObscureOld = true;
   bool isObscure = true;
   bool isObscureConfirmed = true;
-  @override
-  void initState() {
-    super.initState();
-  }
+  FocusNode oldPasswordFocus = FocusNode();
+  FocusNode newPasswordFocus = FocusNode();
+  FocusNode newPasswordConfirmedFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var style = context.watch<ThemeNotifier>();
     return DraggableScrollableSheet(
-      initialChildSize: MediaQuery.of(context).viewInsets.bottom > 0 ? 1 : 0.7,
+      initialChildSize: MediaQuery.of(context).viewInsets.bottom > 0 ? 1 : 0.6,
       expand: false,
       builder: (_, controller) => Container(
         decoration: BoxDecoration(
@@ -38,159 +38,85 @@ class _ChangePasswordState extends State<ChangePassword> {
               topLeft: Radius.circular(30), topRight: Radius.circular(30)),
           color: style.bgColor,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 30),
         child: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              "Change password".toUpperCase(),
-              style: style.title,
+            Txt(
+              text: "Change password".toUpperCase(),
+              style: style.title.copyWith(
+                  color: style.invertedColor.withOpacity(0.7), fontSize: 25),
             ),
             const SizedBox(
-              height: 30,
+              height: 20,
             ),
-            const SizedBox(
-              child: Icon(
-                Icons.lock,
-                color: primaryColor,
-                size: 150,
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: size.width * 0.3,
-                  child: Text(
-                    "Old password : ",
-                    style: style.text18,
-                  ),
-                ),
-                SizedBox(
-                  width: size.width * 0.55,
-                  height: 40,
-                  child: CupertinoTextField(
-                    controller: oldPassword,
-                    style: style.text18,
-                    obscureText: isObscureOld,
-                    decoration: BoxDecoration(
-                        color: style.bgColor,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: primaryColor, width: 1)),
-                    suffix: IconButton(
-                        onPressed: () => setState(() {
-                              isObscureOld = !isObscureOld;
-                            }),
-                        icon: Icon(
-                          !isObscureOld
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          color: primaryColor,
-                        )),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: size.width * 0.3,
-                  child: Text(
-                    "New password : ",
-                    style: style.text18,
-                  ),
-                ),
-                SizedBox(
-                  width: size.width * 0.55,
-                  height: 40,
-                  child: CupertinoTextField(
-                    controller: newPassword,
-                    style: style.text18,
-                    obscureText: isObscure,
-                    decoration: BoxDecoration(
-                        color: style.bgColor,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: primaryColor, width: 1)),
-                    suffix: IconButton(
-                        onPressed: () => setState(() {
-                              isObscure = !isObscure;
-                            }),
-                        icon: Icon(
-                          !isObscure ? Icons.visibility : Icons.visibility_off,
-                          color: primaryColor,
-                        )),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: size.width * 0.3,
-                  child: Text(
-                    "Confirm new password : ",
-                    style: style.text18,
-                  ),
-                ),
-                SizedBox(
-                  width: size.width * 0.55,
-                  height: 40,
-                  child: CupertinoTextField(
-                    controller: newPasswordConfirmed,
-                    style: style.text18,
-                    obscureText: isObscureConfirmed,
-                    decoration: BoxDecoration(
-                        color: style.bgColor,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: primaryColor, width: 1)),
-                    suffix: IconButton(
-                        onPressed: () => setState(() {
-                              isObscureConfirmed = !isObscureConfirmed;
-                            }),
-                        icon: Icon(
-                          !isObscureConfirmed
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          color: primaryColor,
-                        )),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(primaryColor),
-                  ),
-                  onPressed: () => changePasswordvalidator(
-                      context, oldPassword, newPassword, newPasswordConfirmed),
-                  child: SizedBox(
-                    width: 150,
-                    child: Center(
-                      child: Text(
-                        "Change password",
-                        style: style.text18,
-                      ),
-                    ),
-                  )),
-            )
+            SettingTextField(
+                hint: "Old password",
+                controller: oldPassword,
+                isObscure: isObscureOld,
+                isFinal: false,
+                validator: (value) {
+                  return null;
+                },
+                sufixIcon: IconButton(
+                    onPressed: () => setState(() {
+                          isObscureOld = !isObscureOld;
+                        }),
+                    icon: Icon(
+                      !isObscureOld ? Icons.visibility : Icons.visibility_off,
+                      color: primaryColor,
+                    )),
+                focus: oldPasswordFocus),
+            SettingTextField(
+                hint: "New passwoed",
+                controller: newPassword,
+                isObscure: isObscure,
+                isFinal: false,
+                validator: passwordValidator,
+                sufixIcon: IconButton(
+                    onPressed: () => setState(() {
+                          isObscure = !isObscure;
+                        }),
+                    icon: Icon(
+                      !isObscure ? Icons.visibility : Icons.visibility_off,
+                      color: primaryColor,
+                    )),
+                focus: newPasswordFocus),
+            SettingTextField(
+                hint: "Confirm new password",
+                controller: newPasswordConfirmed,
+                isObscure: isObscureConfirmed,
+                isFinal: true,
+                validator: (value) {
+                  return value == newPassword.text
+                      ? null
+                      : "New password doesn't match";
+                },
+                sufixIcon: IconButton(
+                    onPressed: () => setState(() {
+                          isObscureConfirmed = !isObscureConfirmed;
+                        }),
+                    icon: Icon(
+                      !isObscureConfirmed
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: primaryColor,
+                    )),
+                focus: newPasswordConfirmedFocus),
+            primaryButton(
+                context: context,
+                height: 60,
+                width: size.width - 30,
+                widget: Txt(
+                    text: "Change password",
+                    style: text18black.copyWith(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 20,
+                        color: style.bgColor.withOpacity(0.9))),
+                borderRadius: BorderRadius.circular(10),
+                function: () => changePasswordvalidator(
+                    context, oldPassword, newPassword, newPasswordConfirmed)),
           ],
         )),
       ),

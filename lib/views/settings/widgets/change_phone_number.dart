@@ -1,10 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/providers/user_provider.dart';
 import 'package:taba3ni/views/login/validator.dart';
+import 'package:taba3ni/widgets/primary_btn.dart';
+import 'package:taba3ni/widgets/settings_text_field.dart';
+import 'package:taba3ni/widgets/text_widget.dart';
 
 import '../../../providers/app_provider.dart';
 
@@ -18,6 +20,7 @@ class ChangePhoneNumber extends StatefulWidget {
 class _ChangePhoneNumberState extends State<ChangePhoneNumber> {
   late TextEditingController phone;
   late TextEditingController newPhone;
+  FocusNode phoneFocus = FocusNode();
   @override
   void initState() {
     super.initState();
@@ -31,7 +34,7 @@ class _ChangePhoneNumberState extends State<ChangePhoneNumber> {
     var size = MediaQuery.of(context).size;
     var style = context.watch<ThemeNotifier>();
     return DraggableScrollableSheet(
-      initialChildSize: MediaQuery.of(context).viewInsets.bottom > 0 ? 1 : 0.7,
+      initialChildSize: MediaQuery.of(context).viewInsets.bottom > 0 ? 1 : 0.6,
       expand: false,
       builder: (_, controller) => Container(
         decoration: BoxDecoration(
@@ -39,108 +42,57 @@ class _ChangePhoneNumberState extends State<ChangePhoneNumber> {
               topLeft: Radius.circular(30), topRight: Radius.circular(30)),
           color: style.bgColor,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 30),
         child: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              "Change Phone Number".toUpperCase(),
-              style: style.title.copyWith(fontSize: 25),
+            Txt(
+              text: "Change Phone Number".toUpperCase(),
+              style: style.title.copyWith(
+                  color: style.invertedColor.withOpacity(0.7), fontSize: 25),
             ),
             const SizedBox(
               height: 30,
             ),
-            const SizedBox(
-              child: Icon(
-                Icons.phone,
-                color: primaryColor,
-                size: 150,
-              ),
+            SettingTextField(
+              hint: "",
+              label: "Old phone number",
+              controller: phone,
+              isEnabled: false,
+              keybordType: TextInputType.phone,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              validator: (value) {
+                return null;
+              },
+              focus: FocusNode(),
             ),
-            const SizedBox(
-              height: 30,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: size.width * 0.4,
-                  child: Text(
-                    "Old phone number : ",
-                    style: style.text18,
-                  ),
-                ),
-                SizedBox(
-                  width: size.width * 0.45,
-                  height: 40,
-                  child: CupertinoTextField(
-                    controller: phone,
-                    style: style.text18,
-                    textAlign: TextAlign.center,
-                    padding: const EdgeInsets.only(top: 10),
-                    decoration: BoxDecoration(
-                        color: style.bgColor,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: primaryColor, width: 1)),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: size.width * 0.4,
-                  child: Text(
-                    "New phone number : ",
-                    style: style.text18,
-                  ),
-                ),
-                SizedBox(
-                  width: size.width * 0.45,
-                  height: 40,
-                  child: CupertinoTextField(
-                    controller: newPhone,
-                    style: style.text18,
-                    textAlign: TextAlign.center,
-                    padding: const EdgeInsets.only(top: 10),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    maxLength: 8,
-                    decoration: BoxDecoration(
-                        color: style.bgColor,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: primaryColor, width: 1)),
-                  ),
-                ),
-              ],
+            SettingTextField(
+              hint: "55 555 555",
+              controller: newPhone,
+              isFinal: true,
+              validator: phoneNumberValidator,
+              focus: phoneFocus,
+              label: "New phone number",
+              keybordType: TextInputType.phone,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             ),
             const SizedBox(
               height: 20,
             ),
-            Align(
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(primaryColor),
-                  ),
-                  onPressed: () =>
-                      validatorPhone(context, phone.text, newPhone.text),
-                  child: SizedBox(
-                    width: 170,
-                    child: Center(
-                      child: Text(
-                        "Update Phone number",
-                        style: style.text18,
-                      ),
-                    ),
-                  )),
-            )
+            primaryButton(
+                context: context,
+                height: 60,
+                width: size.width - 30,
+                widget: Txt(
+                    text: "Change phone number",
+                    style: text18black.copyWith(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 20,
+                        color: style.bgColor.withOpacity(0.9))),
+                borderRadius: BorderRadius.circular(10),
+                function: () =>
+                    validatorPhone(context, phone.text, newPhone.text)),
           ],
         )),
       ),

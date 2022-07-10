@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/style.dart';
+import 'package:taba3ni/views/settings/settings.dart';
 
 import '../../../providers/app_provider.dart';
 import '../../../providers/auth_provider.dart';
@@ -39,30 +40,34 @@ class ProfileWidget extends StatelessWidget {
           Positioned(
             bottom: 0,
             left: 20,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                boxShadow: const [
-                  BoxShadow(
-                      offset: Offset(0, 3),
-                      blurRadius: 10,
-                      color: Colors.black38)
-                ],
-              ),
-              child: CircleAvatar(
-                backgroundColor: primaryColor,
-                radius: 95,
-                child: user!.image!.toString().isEmpty
-                    ? CircleAvatar(
-                        backgroundColor: style.bgColor,
-                        backgroundImage: const AssetImage("assets/profile.jpg"),
-                        radius: 90,
-                      )
-                    : CircleAvatar(
-                        backgroundColor: style.bgColor,
-                        backgroundImage: NetworkImage(user.image!),
-                        radius: 90,
-                      ),
+            child: Hero(
+              tag: "1",
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  boxShadow: const [
+                    BoxShadow(
+                        offset: Offset(0, 3),
+                        blurRadius: 10,
+                        color: Colors.black38)
+                  ],
+                ),
+                child: CircleAvatar(
+                  backgroundColor: primaryColor,
+                  radius: 95,
+                  child: user!.image.toString().isEmpty
+                      ? CircleAvatar(
+                          backgroundColor: style.bgColor,
+                          backgroundImage:
+                              const AssetImage("assets/profile.jpg"),
+                          radius: 90,
+                        )
+                      : CircleAvatar(
+                          backgroundColor: style.bgColor,
+                          backgroundImage: NetworkImage(user.image),
+                          radius: 90,
+                        ),
+                ),
               ),
             ),
           ),
@@ -76,7 +81,11 @@ class ProfileWidget extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                        log("Edit profile");
+                        log("settings");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const SettingsScreen()));
                       },
                       child: Container(
                         height: 60,
@@ -94,7 +103,7 @@ class ProfileWidget extends StatelessWidget {
                         ),
                         child: Center(
                           child: Icon(
-                            Icons.edit,
+                            Icons.settings,
                             color: style.invertedColor,
                             size: 30,
                           ),

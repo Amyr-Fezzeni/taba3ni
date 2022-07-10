@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/style.dart';
@@ -13,13 +15,26 @@ class SearchWidget extends StatefulWidget {
 
 class _SearchWidgetState extends State<SearchWidget> {
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 50))
+        .then((value) => context.read<DataProvider>().clearSearch(context));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    log("dispose");
+  }
+
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var style = context.watch<ThemeNotifier>();
     return Container(
       margin: EdgeInsets.only(top: size.width * 0.09),
       width: size.width * 0.9,
-      height: 60,
+      height: 70,
       child: Center(
         child: TextFormField(
           onFieldSubmitted: (val) {},
@@ -34,7 +49,7 @@ class _SearchWidgetState extends State<SearchWidget> {
             hintText: "Search...",
             hintStyle: style.text18,
             contentPadding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             focusedBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: primaryColor, width: 1),
               borderRadius: BorderRadius.circular(12),

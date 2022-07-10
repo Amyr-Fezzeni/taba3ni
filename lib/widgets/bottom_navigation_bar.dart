@@ -23,9 +23,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: const [
             CustomIconButton(icon: Icons.home, index: 0),
-            CustomIconButton(icon: Icons.moving_sharp, index: 1),
-            CustomIconButton(icon: Icons.person, index: 2),
-            CustomIconButton(icon: Icons.settings, index: 3),
+            CustomIconButton(icon: Icons.location_on_rounded, index: 1),
+            CustomIconButton(icon: Icons.search, index: 2),
+            CustomIconButton(icon: Icons.person, index: 3),
           ],
         ),
       ),

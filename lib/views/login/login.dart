@@ -87,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         widget: context.watch<AuthProvider>().isLoading
                             ? const Center(
                                 child: CircularProgressIndicator(
-                                  color: Colors.black87,
+                                  color: Colors.white70,
                                 ),
                               )
                             : Txt(

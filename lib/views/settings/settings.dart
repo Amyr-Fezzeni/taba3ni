@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +8,6 @@ import 'package:taba3ni/providers/auth_provider.dart';
 import 'package:taba3ni/providers/user_provider.dart';
 import 'package:taba3ni/views/settings/widgets/change_password.dart';
 import 'package:taba3ni/views/settings/widgets/change_phone_number.dart';
-import 'package:taba3ni/widgets/primary_btn.dart';
 import 'package:taba3ni/widgets/text_widget.dart';
 
 import '../../providers/app_provider.dart';
@@ -17,196 +18,356 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<UserProvider>().currentUser;
+    final user = context.read<AuthProvider>().currentUser;
     var style = context.watch<ThemeNotifier>();
+    var size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: style.bgColor,
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-          color: style.bgColor,
-          child: Center(
-              child: Column(
-            children: [
-              CircleAvatar(
-                backgroundColor: primaryColor,
-                radius: 95,
-                child: user!.image!.toString().isEmpty
-                    ? CircleAvatar(
-                        backgroundColor: style.bgColor,
-                        backgroundImage: const AssetImage("assets/profile.jpg"),
-                        radius: 90,
-                      )
-                    : CircleAvatar(
-                        backgroundColor: style.bgColor,
-                        backgroundImage: NetworkImage(user.image!),
-                        radius: 90,
-                      ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Card(
-                color: style.bgColor,
-                elevation: 3,
-                child: Container(
-                  height: 50,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Name :",
-                        style: style.text18,
-                      ),
-                      Text(
-                        user.fullName,
-                        style: style.text18,
-                      ),
-                    ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: size.height * 0.2,
+              width: size.width,
+              // color: Colors.amber,
+              child: Stack(
+                children: [
+                  Container(
+                    height: size.height * 0.1,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/pattern.png"),
+                          fit: BoxFit.cover,
+                          opacity: 0.1),
+                      boxShadow: [
+                        BoxShadow(
+                            offset: Offset(0, 3),
+                            blurRadius: 10,
+                            color: Colors.black38)
+                      ],
+                      color: primaryColor,
+                    ),
                   ),
+                  Positioned(
+                    top: size.height * 0.1 - 50,
+                    left: 90,
+                    child: Hero(
+                      tag: "1",
+                      child: Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          // color: Colors.amber,
+                          boxShadow: const [
+                            BoxShadow(
+                                offset: Offset(0, 3),
+                                blurRadius: 10,
+                                color: Colors.black38)
+                          ],
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: primaryColor,
+                          radius: 45,
+                          child: user!.image.toString().isEmpty
+                              ? CircleAvatar(
+                                  backgroundColor: style.bgColor,
+                                  backgroundImage:
+                                      const AssetImage("assets/profile.jpg"),
+                                  radius: 45,
+                                )
+                              : CircleAvatar(
+                                  backgroundColor: style.bgColor,
+                                  backgroundImage: NetworkImage(user.image),
+                                  radius: 45,
+                                ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 10,
+                    top: size.height * 0.1 - 30,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.only(right: 5),
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: style.bgColor,
+                          boxShadow: const [
+                            BoxShadow(
+                                offset: Offset(0, 3),
+                                blurRadius: 10,
+                                color: Colors.black38)
+                          ],
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.arrow_back_ios_rounded,
+                            color: style.invertedColor,
+                            size: 35,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                      right: 10,
+                      top: size.height * 0.1 - 25,
+                      child: SizedBox(
+                        // width: 150,
+                        child: InkWell(
+                          onTap: () async => await popup(context, "Ok",
+                              title: "Notification",
+                              confirmFunction: () =>
+                                  context.read<AuthProvider>().logOut(context),
+                              description:
+                                  "Are you sure you want to log out ?"),
+                          child: Container(
+                            height: 50,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 20),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: style.bgColor,
+                              boxShadow: const [
+                                BoxShadow(
+                                    offset: Offset(0, 3),
+                                    blurRadius: 10,
+                                    color: Colors.black38)
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Icon(
+                                  Icons.logout_rounded,
+                                  color: style.invertedColor,
+                                  size: 30,
+                                ),
+                                const SizedBox(width: 10),
+                                Txt(text: "Logout", style: style.text18),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            InkWell(
+              onTap: () {
+                log("change name");
+              },
+              child: Container(
+                height: 50,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.person,
+                      color: style.invertedColor,
+                      size: 25,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Txt(text: user.fullName, style: style.text18),
+                  ],
                 ),
               ),
-              Card(
-                color: style.bgColor,
-                elevation: 3,
-                child: Container(
-                  height: 50,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Email :",
-                        style: style.text18,
-                      ),
-                      Text(
-                        user.email,
-                        style: style.text18,
-                      ),
-                    ],
-                  ),
+            ),
+            Divider(
+              thickness: 0.5,
+              color: style.invertedColor,
+              height: 0,
+            ),
+            InkWell(
+              onTap: () {
+                log("change Email");
+              },
+              child: Container(
+                height: 50,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.email,
+                      color: style.invertedColor,
+                      size: 25,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Txt(text: user.email, style: style.text18),
+                  ],
                 ),
               ),
-              Card(
-                color: style.bgColor,
-                elevation: 3,
-                child: Container(
-                  height: 50,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Phone number :",
-                        style: style.text18,
-                      ),
-                      TextButton(
-                          onPressed: () async {
-                            await showModalBottomSheet(
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                context: context,
-                                builder: (context) =>
-                                    const ChangePhoneNumber());
-                          },
-                          child: Text(
-                            context
-                                .watch<UserProvider>()
-                                .currentUser!
-                                .phoneNumber
-                                .toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1
-                                ?.copyWith(color: primaryColor),
-                          )),
-                    ],
-                  ),
+            ),
+            Divider(
+              thickness: 0.5,
+              color: style.invertedColor,
+              height: 0,
+            ),
+            InkWell(
+              onTap: () async {
+                await showModalBottomSheet(
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    context: context,
+                    builder: (context) => const ChangePhoneNumber());
+              },
+              child: Container(
+                height: 50,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.phone,
+                      color: style.invertedColor,
+                      size: 25,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Txt(text: user.phoneNumber, style: style.text18),
+                  ],
                 ),
               ),
-              Card(
-                color: style.bgColor,
-                elevation: 3,
-                child: Container(
-                  height: 50,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Dark mode :",
-                        style: style.text18,
-                      ),
-                      CupertinoSwitch(
-                          activeColor: primaryColor,
-                          value: style.darkMode,
-                          onChanged: (value) => context
-                              .read<ThemeNotifier>()
-                              .changeDarkMode(value)),
-                    ],
-                  ),
+            ),
+            Divider(
+              thickness: 0.5,
+              color: style.invertedColor,
+              height: 0,
+            ),
+            InkWell(
+              onTap: () async {
+                await showModalBottomSheet(
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    context: context,
+                    builder: (context) => const ChangePassword());
+              },
+              child: Container(
+                height: 50,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.lock_outline_rounded,
+                      color: style.invertedColor,
+                      size: 25,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Txt(text: "Change Password", style: style.text18),
+                  ],
                 ),
               ),
-              Card(
-                color: style.bgColor,
-                elevation: 3,
-                child: Container(
-                  height: 50,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Password :",
-                        style: style.text18,
-                      ),
-                      TextButton(
-                          onPressed: () async {
-                            await showModalBottomSheet(
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                context: context,
-                                builder: (context) => const ChangePassword());
-                          },
-                          child: Text(
-                            "Change Password",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1
-                                ?.copyWith(color: primaryColor),
-                          )),
-                    ],
-                  ),
+            ),
+            Divider(
+              thickness: 0.5,
+              color: style.invertedColor,
+              height: 0,
+            ),
+            Card(
+              color: style.bgColor,
+              elevation: 0,
+              child: Container(
+                height: 50,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Dark mode :",
+                      style: style.text18,
+                    ),
+                    CupertinoSwitch(
+                        activeColor: primaryColor,
+                        value: style.darkMode,
+                        onChanged: (value) => context
+                            .read<ThemeNotifier>()
+                            .changeDarkMode(value)),
+                  ],
                 ),
               ),
-              const SizedBox(
-                height: 20,
+            ),
+            Divider(
+              thickness: 0.5,
+              color: style.invertedColor,
+              height: 0,
+            ),
+            Card(
+              color: style.bgColor,
+              elevation: 0,
+              child: Container(
+                height: 50,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Notification :",
+                      style: style.text18,
+                    ),
+                    CupertinoSwitch(
+                        activeColor: primaryColor,
+                        value: context.watch<UserProvider>().isNotificationOn,
+                        onChanged: (value) => log("activate notification")),
+                  ],
+                ),
               ),
-              primaryButton(
-                  context: context,
-                  height: 50,
-                  width: 260,
-                  widget: Txt(
-                      text: "Logout",
-                      style: text18black.copyWith(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 20,
-                          color: style.bgColor)),
-                  borderRadius: BorderRadius.circular(30),
-                  function: () async => await popup(context, "Ok",
-                      title: "Notification",
-                      confirmFunction: () =>
-                          context.read<AuthProvider>().logOut(context),
-                      description: "Are you sure you want to log out ?")),
-            ],
-          )),
+            ),
+            Divider(
+              thickness: 0.5,
+              color: style.invertedColor,
+              height: 0,
+            ),
+            Card(
+              color: style.bgColor,
+              elevation: 0,
+              child: Container(
+                height: 50,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Location :",
+                      style: style.text18,
+                    ),
+                    CupertinoSwitch(
+                        activeColor: primaryColor,
+                        value: user.locationActivated,
+                        onChanged: (value) => log("activate location")),
+                  ],
+                ),
+              ),
+            ),
+            Divider(
+              thickness: 0.5,
+              color: style.invertedColor,
+              height: 0,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+          ],
         ),
       ),
     );

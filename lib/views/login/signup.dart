@@ -124,11 +124,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         context: context,
                         height: 50,
                         width: 200,
-                        widget: Txt(
-                            text: "SignUp",
-                            style: text18black.copyWith(
-                                fontWeight: FontWeight.w800,
-                                color: lightBgColor.withOpacity(0.8))),
+                        widget: context.watch<AuthProvider>().isLoading
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white70,
+                                ),
+                              )
+                            : Txt(
+                                text: "SignUp",
+                                style: text18black.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    color: lightBgColor.withOpacity(0.8))),
                         borderRadius: BorderRadius.circular(30),
                         function: () async {
                           if (formkey.currentState != null &&

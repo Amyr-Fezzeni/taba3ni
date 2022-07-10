@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:taba3ni/providers/app_provider.dart';
 import 'package:taba3ni/views/profile/widgets/profile_info_widget.dart';
 import 'package:taba3ni/views/profile/widgets/profile_widget.dart';
+import 'package:taba3ni/widgets/favorite_list_widget.dart';
+
+import '../../widgets/connection_list_widget.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -19,8 +22,10 @@ class ProfileScreen extends StatelessWidget {
           children: const [
             ProfileWidget(),
             ProfileInfoWidget(),
+            ConnectionListWidget(),
+            FavoriteListWidget(),
             SizedBox(
-              height: 400,
+              height: 40,
             ),
           ],
         )),

@@ -195,4 +195,20 @@ class UserService {
 
     return l;
   }
+
+  static Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+      getUsersByName(String name) async {
+    final snapshot = await collection.get();
+    if (snapshot.docs.isNotEmpty) {
+      log("search by name" + snapshot.docs.length.toString());
+      return snapshot.docs;
+    } else {
+      return [];
+    }
+  }
+
+  static Future<UserModel?> getUserById(String id) async {
+    final data = await collection.doc(id).get();
+    return UserModel.fromMap(data.data()!);
+  }
 }

@@ -12,64 +12,26 @@ class ProfileInfoWidget extends StatelessWidget {
     final user = context.read<AuthProvider>().currentUser;
     var style = context.watch<ThemeNotifier>();
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       child: Card(
         color: style.bgColor,
         elevation: 0,
-        child: Column(
-          children: [
-            Container(
-              height: 50,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Name :",
-                    style: style.text18,
-                  ),
-                  Text(
-                    user!.fullName,
-                    style: style.text18,
-                  ),
-                ],
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 50,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                child: Text(
+                  user!.fullName,
+                  style: style.title,
+                ),
               ),
-            ),
-            Container(
-              height: 50,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Email :",
-                    style: style.text18,
-                  ),
-                  Text(
-                    user.email,
-                    style: style.text18,
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              height: 50,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Phone number :",
-                    style: style.text18,
-                  ),
-                  Text(
-                    user.phoneNumber,
-                    style: style.text18,
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

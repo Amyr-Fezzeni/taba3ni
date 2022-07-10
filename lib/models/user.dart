@@ -10,7 +10,7 @@ class UserModel {
   String email;
   String phoneNumber;
   String password;
-  String? image;
+  String image;
   LatLng? location;
   DateTime? lastLoggedIn;
   DateTime? lastUpdateLocation;
@@ -29,7 +29,7 @@ class UserModel {
     required this.password,
     this.location,
     this.lastLoggedIn,
-    this.image,
+    this.image = "",
     this.lastUpdateLocation,
     this.isLoggedIn = false,
     this.locationActivated = false,
