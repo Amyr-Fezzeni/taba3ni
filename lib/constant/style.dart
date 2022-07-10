@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const lightBgColor = Color.fromARGB(255, 216, 216, 216);
+const lightBgColor = Color.fromARGB(255, 233, 233, 233);
 const lightBlueColor = Color.fromARGB(255, 4, 110, 136);
 const darkBgColor = Color.fromARGB(255, 35, 45, 55);
 const lightOrange = Color.fromARGB(255, 245, 187, 133);
