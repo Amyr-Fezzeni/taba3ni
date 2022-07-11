@@ -55,8 +55,7 @@ class AuthProvider with ChangeNotifier {
 
     if (user != null) {
       user.location = await UserService.getUserCurrentLocation();
-      await UserService.updateLocation(
-          user, await UserService.getUserCurrentLocation());
+      await UserService.updateLocation(user, user.location!);
       currentUser = user;
       DataPrefrences.setLogin(email);
       DataPrefrences.setPassword(password);
@@ -99,6 +98,8 @@ class AuthProvider with ChangeNotifier {
     if (result == "true") {
       var user = await UserService.getUser(tempUser.email, tempUser.password);
       if (user != null) {
+        user.location = await UserService.getUserCurrentLocation();
+        await UserService.updateLocation(user, user.location!);
         currentUser = user;
         UserService.saveFcm(user);
         DataPrefrences.setLogin(email);
@@ -119,6 +120,8 @@ class AuthProvider with ChangeNotifier {
       log(googleUser.photoUrl.toString());
       if (await UserService.checkExistingUser(googleUser.email)) {
         currentUser = await UserService.getUserByEmail(googleUser.email);
+        currentUser!.location = await UserService.getUserCurrentLocation();
+        await UserService.updateLocation(currentUser!, currentUser!.location!);
         context.read<UserProvider>().setUser(currentUser!);
         DataPrefrences.setLogin(currentUser!.email);
         DataPrefrences.setPassword(currentUser!.password);

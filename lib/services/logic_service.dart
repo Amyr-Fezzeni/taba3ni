@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:crossplat_objectid/crossplat_objectid.dart';
 
 String generateId() {
@@ -10,7 +12,9 @@ int createUniqueId() {
 }
 
 String getLastTimeUpdated(DateTime? time) {
-  return "now";
+  log("time");
+  print(time);
+  return time != null ? "${time.hour}:${time.minute}" : "now";
 }
 
 List<String> getListString(List<dynamic> data) {

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/models/user.dart';
+import 'package:taba3ni/providers/user_provider.dart';
+import 'package:taba3ni/widgets/primary_btn.dart';
+import 'package:taba3ni/widgets/text_widget.dart';
 
 import '../../providers/app_provider.dart';
 
@@ -109,6 +112,61 @@ class PublicProfileScreen extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Txt(text: user.fullName, style: style.title),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  // context.watch<UserProvider>().currentUser!.followed.contains(user.id!)?
+                  primaryButton(
+                      context: context,
+                      height: 50,
+                      width: 150,
+                      color: primaryColor,
+                      borderRadius: BorderRadius.circular(12),
+                      widget: context.watch<UserProvider>().isLoading
+                          ? const Center(
+                              child: SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 3,
+                                ),
+                              ),
+                            )
+                          : Txt(text: "Follow", style: style.text18),
+                      function: () => context
+                          .read<UserProvider>()
+                          .addConnection(context, user.id!)),
+                  primaryButton(
+                      context: context,
+                      height: 50,
+                      width: 150,
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(12),
+                      widget: context.watch<UserProvider>().isLoadingSecond
+                          ? const Center(
+                              child: SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 3,
+                                ),
+                              ),
+                            )
+                          : Txt(text: "Block", style: style.text18),
+                      function: () => context
+                          .read<UserProvider>()
+                          .addBlock(context, user.id!)),
+                ],
               )
             ],
           )),

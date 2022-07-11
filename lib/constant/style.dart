@@ -8,7 +8,7 @@ const lightOrange = Color.fromARGB(255, 245, 187, 133);
 const darkBtnColor = Color.fromARGB(255, 41, 190, 254);
 
 const lightnavBarColor = Color.fromARGB(255, 255, 255, 255);
-const darknavBarColor = Color.fromARGB(255, 41, 41, 41);
+const darknavBarColor = Color.fromARGB(255, 40, 51, 62);
 
 const primaryColor = Color.fromARGB(255, 49, 133, 156);
 const secondaryColor = Color.fromARGB(255, 206, 6, 6);

@@ -110,8 +110,10 @@ class UserService {
 
   static Future<bool> updateLocation(UserModel user, LatLng location) async {
     try {
-      await FirebaseFirestore.instance.collection("users").doc(user.id).update(
-          {"location": GeoPoint(location.latitude, location.longitude)});
+      await FirebaseFirestore.instance.collection("users").doc(user.id).update({
+        "location": GeoPoint(location.latitude, location.longitude),
+        "lastUpdateLocation": DateTime.now().millisecondsSinceEpoch
+      });
       return true;
     } on Exception {
       return false;

@@ -13,9 +13,11 @@ class UserProvider with ChangeNotifier {
   UserModel? currentUser;
   bool isNotificationOn = true;
   bool isLoading = false;
+  bool isLoadingSecond = false;
   Set<Marker> markers = {};
 
   setMarker() async {
+    await updateUser();
     markers = {};
     BitmapDescriptor icon = currentUser!.image.isNotEmpty
         ? await MarkerIcon.downloadResizePictureCircle(currentUser!.image,
@@ -30,7 +32,9 @@ class UserProvider with ChangeNotifier {
     markers.add(Marker(
       icon: icon,
       markerId: MarkerId(currentUser!.id!),
-      position: await UserService.getUserCurrentLocation(),
+      position: currentUser!.location!,
+      onTap: () => mapController.animateCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(target: currentUser!.location!, zoom: 15, tilt: 45))),
       infoWindow: InfoWindow(
         title: currentUser!.fullName.toString(),
         snippet: getLastTimeUpdated(currentUser!.lastUpdateLocation),
@@ -52,11 +56,37 @@ class UserProvider with ChangeNotifier {
     currentUser = user;
     log("user set done! ${user.email}");
     notifyListeners();
-    currentUser!.location = await UserService.getUserCurrentLocation();
     if (user.id != null) DataPrefrences.setId(user.id!);
     DataPrefrences.setLogin(user.email);
     DataPrefrences.setPassword(user.password);
+  }
 
+  locateUser(UserModel user) async {
+    markers.removeWhere((element) => element.markerId == MarkerId(user.id!));
+    BitmapDescriptor icon = user.image.isNotEmpty
+        ? await MarkerIcon.downloadResizePictureCircle(user.image,
+            size: 150,
+            addBorder: true,
+            borderColor: primaryColor,
+            borderSize: 15)
+        : await BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(size: Size(50, 50)),
+            "assets/profile.png",
+          );
+    markers.add(Marker(
+      icon: icon,
+      markerId: MarkerId(user.id!),
+      position: user.location!,
+      onTap: () => mapController.animateCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(target: user.location!, zoom: 15, tilt: 45))),
+      infoWindow: InfoWindow(
+        title: user.fullName.toString(),
+        snippet: getLastTimeUpdated(user.lastUpdateLocation),
+      ),
+    ));
+
+    mapController.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target: user.location!, zoom: 15, tilt: 45)));
     notifyListeners();
   }
 
@@ -69,7 +99,27 @@ class UserProvider with ChangeNotifier {
 
   changePhoneNumber(BuildContext context, String phone) {}
 
+  addConnection(BuildContext context, String id) async {
+    isLoading = true;
+    notifyListeners();
+    await Future.delayed(const Duration(seconds: 1));
+    isLoading = false;
+    notifyListeners();
+  }
+
+  addFavorite(BuildContext context, String id) {}
+
+  addBlock(BuildContext context, String id) async {
+    isLoadingSecond = true;
+    notifyListeners();
+    await Future.delayed(const Duration(seconds: 1));
+    isLoadingSecond = false;
+    notifyListeners();
+  }
+
   Future<void> updateUser() async {
+    await UserService.updateLocation(
+        currentUser!, await UserService.getUserCurrentLocation());
     currentUser =
         await UserService.getUser(currentUser!.email, currentUser!.password);
     notifyListeners();

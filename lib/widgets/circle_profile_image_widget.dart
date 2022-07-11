@@ -35,7 +35,7 @@ class CircleProfileImage extends StatelessWidget {
           child: isAsset
               ? CircleAvatar(
                   backgroundColor: style.bgColor,
-                  backgroundImage: AssetImage(img),
+                  backgroundImage: AssetImage(img.isEmpty? "assets/profile.jpg" : img),
                   radius: size * 0.9,
                 )
               : CircleAvatar(
