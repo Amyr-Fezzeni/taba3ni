@@ -32,10 +32,10 @@ class CircleProfileImage extends StatelessWidget {
         child: CircleAvatar(
           backgroundColor: primaryColor,
           radius: size,
-          child: isAsset
+          child: img.isEmpty
               ? CircleAvatar(
                   backgroundColor: style.bgColor,
-                  backgroundImage: AssetImage(img.isEmpty? "assets/profile.jpg" : img),
+                  backgroundImage: const AssetImage("assets/profile.jpg"),
                   radius: size * 0.9,
                 )
               : CircleAvatar(

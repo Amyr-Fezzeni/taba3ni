@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/models/user.dart';
+import 'package:taba3ni/providers/state_provider.dart';
+import 'package:taba3ni/providers/user_provider.dart';
 import 'package:taba3ni/views/profile/public_profile.dart';
 import 'package:taba3ni/widgets/text_widget.dart';
 
@@ -17,8 +19,12 @@ class UserCard extends StatelessWidget {
       color: style.bgColor,
       elevation: 2,
       child: ListTile(
-        onTap: () => Navigator.push(context,
-            MaterialPageRoute(builder: (_) => PublicProfileScreen(user: user))),
+        onTap: () => user.id == context.read<UserProvider>().currentUser!.id
+            ? context.read<StateProvider>().changeScreen(3)
+            : Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => PublicProfileScreen(user: user))),
         contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
         subtitle:
             Txt(text: "See info", style: style.text18.copyWith(fontSize: 12)),

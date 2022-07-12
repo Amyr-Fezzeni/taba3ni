@@ -123,49 +123,132 @@ class PublicProfileScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // context.watch<UserProvider>().currentUser!.followed.contains(user.id!)?
-                  primaryButton(
-                      context: context,
-                      height: 50,
-                      width: 150,
-                      color: primaryColor,
-                      borderRadius: BorderRadius.circular(12),
-                      widget: context.watch<UserProvider>().isLoading
-                          ? const Center(
-                              child: SizedBox(
-                                height: 30,
-                                width: 30,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 3,
-                                ),
-                              ),
-                            )
-                          : Txt(text: "Follow", style: style.text18),
-                      function: () => context
-                          .read<UserProvider>()
-                          .addConnection(context, user.id!)),
-                  primaryButton(
-                      context: context,
-                      height: 50,
-                      width: 150,
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(12),
-                      widget: context.watch<UserProvider>().isLoadingSecond
-                          ? const Center(
-                              child: SizedBox(
-                                height: 30,
-                                width: 30,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 3,
-                                ),
-                              ),
-                            )
-                          : Txt(text: "Block", style: style.text18),
-                      function: () => context
-                          .read<UserProvider>()
-                          .addBlock(context, user.id!)),
+                  context
+                          .watch<UserProvider>()
+                          .currentUser!
+                          .baned
+                          .contains(user.id!)
+                      ? primaryButton(
+                          context: context,
+                          height: 50,
+                          width: 150,
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(12),
+                          widget: context.watch<UserProvider>().isLoading
+                              ? const Center(
+                                  child: SizedBox(
+                                    height: 30,
+                                    width: 30,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 3,
+                                    ),
+                                  ),
+                                )
+                              : Txt(
+                                  text: !context
+                                          .watch<UserProvider>()
+                                          .currentUser!
+                                          .followed
+                                          .contains(user.id!)
+                                      ? "Follow"
+                                      : "Unfollow",
+                                  style: text18white),
+                        )
+                      : !context
+                              .watch<UserProvider>()
+                              .currentUser!
+                              .followed
+                              .contains(user.id!)
+                          ? primaryButton(
+                              context: context,
+                              height: 50,
+                              width: 150,
+                              color: primaryColor,
+                              borderRadius: BorderRadius.circular(12),
+                              widget: context.watch<UserProvider>().isLoading
+                                  ? const Center(
+                                      child: SizedBox(
+                                        height: 30,
+                                        width: 30,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 3,
+                                        ),
+                                      ),
+                                    )
+                                  : Txt(text: "Follow", style: text18white),
+                              function: () => context
+                                  .read<UserProvider>()
+                                  .addConnection(context, user.id!))
+                          : primaryButton(
+                              context: context,
+                              height: 50,
+                              width: 150,
+                              color: primaryColor,
+                              borderRadius: BorderRadius.circular(12),
+                              widget: context.watch<UserProvider>().isLoading
+                                  ? const Center(
+                                      child: SizedBox(
+                                        height: 30,
+                                        width: 30,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 3,
+                                        ),
+                                      ),
+                                    )
+                                  : Txt(text: "Unfollow", style: text18white),
+                              function: () => context
+                                  .read<UserProvider>()
+                                  .removeConnection(context, user.id!)),
+                  !context
+                          .watch<UserProvider>()
+                          .currentUser!
+                          .baned
+                          .contains(user.id!)
+                      ? primaryButton(
+                          context: context,
+                          height: 50,
+                          width: 150,
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(12),
+                          widget: context.watch<UserProvider>().isLoadingSecond
+                              ? const Center(
+                                  child: SizedBox(
+                                    height: 30,
+                                    width: 30,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 3,
+                                    ),
+                                  ),
+                                )
+                              : Txt(text: "Block", style: text18white),
+                          function: () => context
+                              .read<UserProvider>()
+                              .addBlock(context, user.id!))
+                      : primaryButton(
+                          context: context,
+                          height: 50,
+                          width: 150,
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(12),
+                          widget: context.watch<UserProvider>().isLoadingSecond
+                              ? const Center(
+                                  child: SizedBox(
+                                    height: 30,
+                                    width: 30,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 3,
+                                    ),
+                                  ),
+                                )
+                              : Txt(text: "Unblock", style: text18white),
+                          function: () => context
+                              .read<UserProvider>()
+                              .removeBlock(context, user.id!)),
                 ],
               )
             ],

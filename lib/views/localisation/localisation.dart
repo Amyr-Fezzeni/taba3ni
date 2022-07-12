@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/models/user.dart';
 import 'package:taba3ni/providers/app_provider.dart';
 import 'package:taba3ni/services/user_service.dart';
 import 'package:taba3ni/widgets/circle_profile_image_widget.dart';
 import '../../providers/user_provider.dart';
+import 'dart:ui' as ui;
 
 class TrackingScreen extends StatefulWidget {
   const TrackingScreen({Key? key}) : super(key: key);
@@ -44,46 +46,40 @@ class _TrackingScreenState extends State<TrackingScreen> {
               ),
             ),
           ),
-          context.watch<UserProvider>().currentUser!.sharedLocation.isEmpty
+          context.watch<UserProvider>().currentUser!.followed.isEmpty
               ? const SizedBox()
               : Positioned(
-                  left: 0,
-                  bottom: 70,
+                  left: size.width * 0.05,
+                  bottom: 90,
                   child: StreamBuilder(
                     stream: UserService.collection
                         .where("id",
                             whereIn: context
                                 .read<UserProvider>()
                                 .currentUser!
-                                .sharedLocation)
+                                .followed)
                         .snapshots(),
                     builder: (context, AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.connectionState == ConnectionState.active) {
-                        List<dynamic> users = snapshot.data.docs;
-                        return Container(
-                          padding: const EdgeInsets.only(left: 0),
-                          width: size.width,
-                          height: 100,
-                          child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            itemCount: users.length,
-                            itemBuilder: (context, index) {
-                              UserModel user =
-                                  UserModel.fromMap(users[index].data());
-                              return InkWell(
-                                onTap: () => context
-                                    .read<UserProvider>()
-                                    .locateUser(user),
-                                child: CircleProfileImage(
-                                  size: 35,
-                                  isAsset: false,
-                                  img: user.image.isNotEmpty ? user.image : "",
-                                ),
-                              );
-                            },
-                          ),
-                        );
+                        List<dynamic> users = snapshot.data.docs
+                            .map((e) => UserModel.fromMap(e.data()))
+                            .toList();
+                        return bluryContainer(
+                            width: size.width * 0.9,
+                            color: darkBgColor.withOpacity(0.2),
+                            child: ListView(
+                              physics: const BouncingScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                MapUserIcon(
+                                    user: context
+                                        .read<UserProvider>()
+                                        .currentUser!,
+                                    context: context),
+                                ...users.map((user) =>
+                                    MapUserIcon(user: user, context: context))
+                              ],
+                            ));
                       }
                       return const SizedBox();
                     },
@@ -92,4 +88,30 @@ class _TrackingScreenState extends State<TrackingScreen> {
       ),
     );
   }
+
+  Widget MapUserIcon({required UserModel user, required BuildContext context}) {
+    return InkWell(
+      onTap: () => context.read<UserProvider>().locateUser(user),
+      child: CircleProfileImage(
+        size: 35,
+        isAsset: false,
+        img: user.image.isNotEmpty ? user.image : "",
+      ),
+    );
+  }
+}
+
+Widget bluryContainer({required double width, required color, required child}) {
+  return SizedBox(
+    height: 90,
+    child: Container(
+        width: width,
+        height: 90,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20), color: color),
+        child: BackdropFilter(
+          filter: ui.ImageFilter.blur(sigmaX: 0.0, sigmaY: 0.0),
+          child: child,
+        )),
+  );
 }

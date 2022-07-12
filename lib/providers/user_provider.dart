@@ -8,6 +8,7 @@ import 'package:taba3ni/models/user.dart';
 import 'package:taba3ni/services/logic_service.dart';
 import 'package:taba3ni/services/shared_data.dart';
 import 'package:taba3ni/services/user_service.dart';
+import 'package:taba3ni/widgets/popup.dart';
 
 class UserProvider with ChangeNotifier {
   UserModel? currentUser;
@@ -103,18 +104,71 @@ class UserProvider with ChangeNotifier {
     isLoading = true;
     notifyListeners();
     await Future.delayed(const Duration(seconds: 1));
+    currentUser!.followed.add(id);
+    final result = await UserService.addConnection(currentUser!);
+    popup(context, "Ok",
+        description: result ? "Request sent" : "Try again later");
     isLoading = false;
-    notifyListeners();
+    updateUser();
   }
 
-  addFavorite(BuildContext context, String id) {}
+  removeConnection(BuildContext context, String id) async {
+    isLoading = true;
+    notifyListeners();
+    await Future.delayed(const Duration(seconds: 1));
+    currentUser!.followed.remove(id);
+    final result = await UserService.addConnection(currentUser!);
+    popup(context, "Ok",
+        description: result ? "Frind removed" : "Try again later");
+    isLoading = false;
+    updateUser();
+  }
+
+  addFavorite(BuildContext context, String id) async {
+    isLoading = true;
+    notifyListeners();
+    currentUser!.followed.add(id);
+    final result = await UserService.addFavorite(currentUser!);
+    popup(context, "Ok",
+        description:
+            result ? "Now you both share locations" : "Try again later");
+    isLoading = false;
+    updateUser();
+  }
+
+  removeFavorite(BuildContext context, String id) async {
+    isLoading = true;
+    notifyListeners();
+    currentUser!.followed.remove(id);
+    final result = await UserService.addFavorite(currentUser!);
+    popup(context, "Ok",
+        description: result ? "Location desactivated" : "Try again later");
+    isLoading = false;
+    updateUser();
+  }
 
   addBlock(BuildContext context, String id) async {
     isLoadingSecond = true;
     notifyListeners();
     await Future.delayed(const Duration(seconds: 1));
+    currentUser!.baned.add(id);
+    final result = await UserService.addBlock(currentUser!);
+    popup(context, "Ok",
+        description: result ? "User Blocked" : "Try again later");
     isLoadingSecond = false;
+    updateUser();
+  }
+
+  removeBlock(BuildContext context, String id) async {
+    isLoadingSecond = true;
     notifyListeners();
+    await Future.delayed(const Duration(seconds: 1));
+    currentUser!.baned.remove(id);
+    final result = await UserService.addBlock(currentUser!);
+    popup(context, "Ok",
+        description: result ? "User Unblocked" : "Try again later");
+    isLoadingSecond = false;
+    updateUser();
   }
 
   Future<void> updateUser() async {

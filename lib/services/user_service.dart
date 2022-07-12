@@ -120,6 +120,45 @@ class UserService {
     }
   }
 
+  /////////////////////////////////////////////
+  static Future<bool> addConnection(UserModel user) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.id)
+          .update({"followed": user.followed});
+      return true;
+    } on Exception {
+      return false;
+    }
+  }
+
+  static Future<bool> addFavorite(
+    UserModel user,
+  ) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.id)
+          .update({"sharedLocation": user.sharedLocation});
+      return true;
+    } on Exception {
+      return false;
+    }
+  }
+
+  static Future<bool> addBlock(UserModel user) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.id)
+          .update({"baned": user.baned});
+      return true;
+    } on Exception {
+      return false;
+    }
+  }
+
   static Future<bool> changePhoneNumber(UserModel user) async {
     try {
       await FirebaseFirestore.instance
