@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
@@ -48,9 +49,9 @@ class AuthProvider with ChangeNotifier {
       BuildContext context, String email, String password) async {
     isLoading = true;
     notifyListeners();
-    // final result = await FirebaseAuth.instance
-    //       .signInWithEmailAndPassword(email: email, password: password);
-
+    final result = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
+    log(result.toString());
     var user = await UserService.getUser(email, password);
 
     if (user != null) {

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:taba3ni/constant/style.dart';
 
@@ -9,7 +10,70 @@ class SendAlertWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => log("Send Alert"),
+      onTap: () async {
+        // try {
+        //   await FirebaseAuth.instance.verifyPhoneNumber(
+        //       phoneNumber: "+21654230376",
+        //       timeout: const Duration(seconds: 120),
+        //       verificationCompleted: (AuthCredential authCredential) {
+        //         log(authCredential.toString());
+        //       },
+        //       verificationFailed:
+        //           (FirebaseAuthException firebaseAuthException) {
+        //         log(firebaseAuthException.toString());
+        //       },
+        //       codeSent: (String verificationId, int? code) {
+        //         log(verificationId);
+        //         log(code.toString());
+        //         TextEditingController _codeController = TextEditingController();
+        //         showDialog(
+        //             context: context,
+        //             barrierDismissible: false,
+        //             builder: (context) => AlertDialog(
+        //                   title: const Text("Enter SMS Code"),
+        //                   content: Column(
+        //                     mainAxisSize: MainAxisSize.min,
+        //                     children: <Widget>[
+        //                       TextField(
+        //                         controller: _codeController,
+        //                       ),
+        //                     ],
+        //                   ),
+        //                   actions: <Widget>[
+        //                     FlatButton(
+        //                       child: const Text("Done"),
+        //                       textColor: Colors.white,
+        //                       color: Colors.redAccent,
+        //                       onPressed: () {
+        //                         FirebaseAuth auth = FirebaseAuth.instance;
+
+        //                         String smsCode = _codeController.text.trim();
+                                
+        //                         var _credential =
+        //                             PhoneAuthProvider.credential(
+        //                                 verificationId: verificationId,
+        //                                 smsCode: smsCode);
+        //                         auth
+        //                             .signInWithCredential(_credential)
+        //                             .then((result) {
+        //                               log(result.toString());
+        //                           log("phone verifiyed");
+        //                         }).catchError((e) {
+        //                           print(e);
+        //                         });
+        //                       },
+        //                     )
+        //                   ],
+        //                 ));
+        //       },
+        //       codeAutoRetrievalTimeout: (String time) {
+        //         log(time.toString());
+        //       });
+        //   log(FirebaseAuth.instance.currentUser.toString());
+        // } on Exception catch (e) {
+        //   log(e.toString());
+        // }
+      },
       child: Container(
         height: 100,
         margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),

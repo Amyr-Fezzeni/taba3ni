@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:taba3ni/constant/style.dart';
 
@@ -9,7 +7,48 @@ class GetHomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => log("get home safe"),
+      onTap: () async {
+        // TextEditingController _codeController = TextEditingController();
+        // TextEditingController id = TextEditingController();
+        // showDialog(
+        //     context: context,
+        //     barrierDismissible: false,
+        //     builder: (context) => AlertDialog(
+        //           title: const Text("Enter SMS Code"),
+        //           content: Column(
+        //             mainAxisSize: MainAxisSize.min,
+        //             children: <Widget>[
+        //               TextField(
+        //                 controller: _codeController,
+        //               ),
+        //               TextField(
+        //                 controller: id,
+        //               ),
+        //             ],
+        //           ),
+        //           actions: <Widget>[
+        //             FlatButton(
+        //               child: const Text("Done"),
+        //               textColor: Colors.white,
+        //               color: Colors.redAccent,
+        //               onPressed: () {
+        //                 FirebaseAuth auth = FirebaseAuth.instance;
+
+        //                 String smsCode = _codeController.text.trim();
+
+        //                 var _credential = PhoneAuthProvider.credential(
+        //                     verificationId: id.text.trim(), smsCode: smsCode);
+        //                 auth.signInWithCredential(_credential).then((result) {
+        //                   log(result.toString());
+        //                   log("phone verifiyed");
+        //                 }).catchError((e) {
+        //                   print(e);
+        //                 });
+        //               },
+        //             )
+        //           ],
+        //         ));
+      },
       child: Container(
         height: 100,
         margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
