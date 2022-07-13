@@ -104,7 +104,7 @@ class UserProvider with ChangeNotifier {
     isLoading = true;
     notifyListeners();
     currentUser!.followed.add(id);
-    final result = await UserService.addConnection(currentUser!);
+    final result = await UserService.updateConnection(currentUser!);
     popup(context, "Ok",
         description: result ? "Request sent" : "Try again later");
     isLoading = false;
@@ -114,9 +114,8 @@ class UserProvider with ChangeNotifier {
   removeConnection(BuildContext context, String id) async {
     isLoading = true;
     notifyListeners();
-    await Future.delayed(const Duration(seconds: 1));
     currentUser!.followed.remove(id);
-    final result = await UserService.addConnection(currentUser!);
+    final result = await UserService.updateConnection(currentUser!);
     popup(context, "Ok",
         description: result ? "Frind removed" : "Try again later");
     isLoading = false;
@@ -127,7 +126,7 @@ class UserProvider with ChangeNotifier {
     isLoading = true;
     notifyListeners();
     currentUser!.followed.add(id);
-    final result = await UserService.addFavorite(currentUser!);
+    final result = await UserService.updateFavorite(currentUser!);
     popup(context, "Ok",
         description:
             result ? "Now you both share locations" : "Try again later");
@@ -139,7 +138,7 @@ class UserProvider with ChangeNotifier {
     isLoading = true;
     notifyListeners();
     currentUser!.followed.remove(id);
-    final result = await UserService.addFavorite(currentUser!);
+    final result = await UserService.updateFavorite(currentUser!);
     popup(context, "Ok",
         description: result ? "Location desactivated" : "Try again later");
     isLoading = false;
@@ -149,9 +148,8 @@ class UserProvider with ChangeNotifier {
   addBlock(BuildContext context, String id) async {
     isLoadingSecond = true;
     notifyListeners();
-    await Future.delayed(const Duration(seconds: 1));
     currentUser!.baned.add(id);
-    final result = await UserService.addBlock(currentUser!);
+    final result = await UserService.updateBlock(currentUser!);
     popup(context, "Ok",
         description: result ? "User Blocked" : "Try again later");
     isLoadingSecond = false;
@@ -161,9 +159,8 @@ class UserProvider with ChangeNotifier {
   removeBlock(BuildContext context, String id) async {
     isLoadingSecond = true;
     notifyListeners();
-    await Future.delayed(const Duration(seconds: 1));
     currentUser!.baned.remove(id);
-    final result = await UserService.addBlock(currentUser!);
+    final result = await UserService.updateBlock(currentUser!);
     popup(context, "Ok",
         description: result ? "User Unblocked" : "Try again later");
     isLoadingSecond = false;
