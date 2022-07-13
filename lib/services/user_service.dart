@@ -121,7 +121,7 @@ class UserService {
   }
 
   /////////////////////////////////////////////
-  static Future<bool> addConnection(UserModel user) async {
+  static Future<bool> updateConnection(UserModel user) async {
     try {
       await FirebaseFirestore.instance
           .collection("users")
@@ -133,7 +133,33 @@ class UserService {
     }
   }
 
-  static Future<bool> addFavorite(
+  static Future<bool> addRequest(UserModel user, String userId) async {
+    final secondUser = await getUserById(userId);
+    try {
+      if (secondUser != null) {
+        secondUser.requested.contains(user.id!)
+            ? secondUser.requested.add(user.id!)
+            : null;
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(userId)
+            .update({"requested": secondUser.requested});
+
+        user.sentRequest.add(userId);
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(userId)
+            .update({"sentRequest": user.sentRequest});
+
+        return true;
+      }
+      return false;
+    } on Exception {
+      return false;
+    }
+  }
+
+  static Future<bool> updateFavorite(
     UserModel user,
   ) async {
     try {
@@ -147,7 +173,7 @@ class UserService {
     }
   }
 
-  static Future<bool> addBlock(UserModel user) async {
+  static Future<bool> updateBlock(UserModel user) async {
     try {
       await FirebaseFirestore.instance
           .collection("users")

@@ -103,7 +103,6 @@ class UserProvider with ChangeNotifier {
   addConnection(BuildContext context, String id) async {
     isLoading = true;
     notifyListeners();
-    await Future.delayed(const Duration(seconds: 1));
     currentUser!.followed.add(id);
     final result = await UserService.addConnection(currentUser!);
     popup(context, "Ok",
