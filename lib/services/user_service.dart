@@ -137,52 +137,57 @@ class UserService {
     final secondUser = await getUserById(userId);
     try {
       if (secondUser != null) {
-        !secondUser.requested.contains(user.id!)
-            ? secondUser.requested.add(user.id!)
-            : null;
-        await FirebaseFirestore.instance
-            .collection("users")
-            .doc(userId)
-            .update({"requested": secondUser.requested});
-            !user.sentRequest.contains(userId)
-            ? user.sentRequest.add(userId)
-            : null;
-        await FirebaseFirestore.instance
-            .collection("users")
-            .doc(userId)
-            .update({"sentRequest": user.sentRequest});
-        return true;
+        if (!secondUser.requested.contains(user.id!)) {
+          secondUser.requested.add(user.id!);
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(userId)
+              .update({"requested": secondUser.requested});
+        }
+
+        if (!user.sentRequest.contains(userId)) {
+          user.sentRequest.add(userId);
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(user.id!)
+              .update({"sentRequest": user.sentRequest});
+          return true;
+        }
       }
       return false;
     } on Exception {
       return false;
     }
   }
- static Future<bool> removeRequest(UserModel user, String userId) async {
+
+  static Future<bool> removeRequest(UserModel user, String userId) async {
     final secondUser = await getUserById(userId);
     try {
-      if (secondUser != null) {
-        secondUser.requested.contains(user.id!)
-            ? secondUser.requested.remove(user.id!)
-            : null;
+      if (secondUser != null && secondUser.requested.contains(user.id!)) {
+        secondUser.requested.remove(user.id!);
+
         await FirebaseFirestore.instance
             .collection("users")
             .doc(userId)
             .update({"requested": secondUser.requested});
-            user.sentRequest.contains(userId)
-            ? user.sentRequest.remove(userId)
-            : null;
+      }
+
+      if (user.sentRequest.contains(userId)) {
+        user.sentRequest.remove(userId);
+
         await FirebaseFirestore.instance
             .collection("users")
-            .doc(userId)
+            .doc(user.id)
             .update({"sentRequest": user.sentRequest});
         return true;
       }
+
       return false;
     } on Exception {
       return false;
     }
   }
+
   static Future<bool> updateFavorite(
     UserModel user,
   ) async {

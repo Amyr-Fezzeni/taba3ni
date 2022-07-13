@@ -158,7 +158,7 @@ class PublicProfileScreen extends StatelessWidget {
                       : !context
                               .watch<UserProvider>()
                               .currentUser!
-                              .followed
+                              .sentRequest
                               .contains(user.id!)
                           ? primaryButton(
                               context: context,
@@ -180,7 +180,7 @@ class PublicProfileScreen extends StatelessWidget {
                                   : Txt(text: "Follow", style: text18white),
                               function: () => context
                                   .read<UserProvider>()
-                                  .addConnection(context, user.id!))
+                                  .addRequest(context, user.id!))
                           : primaryButton(
                               context: context,
                               height: 50,
@@ -198,10 +198,10 @@ class PublicProfileScreen extends StatelessWidget {
                                         ),
                                       ),
                                     )
-                                  : Txt(text: "Unfollow", style: text18white),
+                                  : Txt(text: "Requested", style: text18white),
                               function: () => context
                                   .read<UserProvider>()
-                                  .removeConnection(context, user.id!)),
+                                  .removeRequest(context, user.id!)),
                   !context
                           .watch<UserProvider>()
                           .currentUser!
