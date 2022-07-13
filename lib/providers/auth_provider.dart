@@ -92,6 +92,7 @@ class AuthProvider with ChangeNotifier {
         baned: [],
         followed: [],
         requested: [],
+        sentRequest: [],
         sharedLocation: []);
 
     var result = await UserService.addUser(tempUser);

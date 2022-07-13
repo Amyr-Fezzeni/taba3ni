@@ -121,7 +121,25 @@ class UserProvider with ChangeNotifier {
     isLoading = false;
     updateUser();
   }
+  addRequest(BuildContext context, String id) async {
+    isLoading = true;
+    notifyListeners();
+    final result = await UserService.addRequest(currentUser!,id);
+    popup(context, "Ok",
+        description: result ? "Request sent" : "Try again later");
+    isLoading = false;
+    updateUser();
+  }
 
+  removeRequest(BuildContext context, String id) async {
+    isLoading = true;
+    notifyListeners();
+    final result = await UserService.removeRequest(currentUser!,id);
+    popup(context, "Ok",
+        description: result ? "Request removed" : "Try again later");
+    isLoading = false;
+    updateUser();
+  }
   addFavorite(BuildContext context, String id) async {
     isLoading = true;
     notifyListeners();

@@ -17,6 +17,7 @@ class UserModel {
   bool isLoggedIn;
   bool locationActivated;
   List<String> requested;
+  List<String> sentRequest;
   List<String> followed;
   List<String> baned;
   List<String> sharedLocation;
@@ -37,11 +38,12 @@ class UserModel {
     required this.followed,
     required this.requested,
     required this.sharedLocation,
+    required this.sentRequest
   });
 
   @override
   String toString() {
-    return 'User(id: $id, fullName: $fullName, email: $email, phoneNumber: $phoneNumber, image: $image, password: $password, location: $location, lastLoggedIn: $lastLoggedIn, lastUpdateLocation: $lastUpdateLocation, isLoggedIn: $isLoggedIn, locationActivated: $locationActivated, sharedLocation:$sharedLocation, followed:$followed, requested:$requested, baned:$baned)';
+    return 'User(id: $id, fullName: $fullName, email: $email, phoneNumber: $phoneNumber, image: $image, password: $password, location: $location, lastLoggedIn: $lastLoggedIn, lastUpdateLocation: $lastUpdateLocation, isLoggedIn: $isLoggedIn, locationActivated: $locationActivated, sharedLocation:$sharedLocation, followed:$followed, requested:$requested, baned:$baned, sentRequest:$sentRequest)';
   }
 
   Map<String, dynamic> toMap() {
@@ -62,6 +64,7 @@ class UserModel {
       'followed': followed,
       'baned': baned,
       'requested': requested,
+      'sentRequest':sentRequest,
       'sharedLocation': sharedLocation
     };
   }
@@ -89,6 +92,7 @@ class UserModel {
       locationActivated: map['locationActivated'] as bool,
       followed: getListString(map['followed']),
       requested: getListString(map['requested']),
+      sentRequest:getListString(map['sentRequest']??[]),
       baned: getListString(map['baned']),
       sharedLocation: getListString(map['sharedLocation']),
     );
