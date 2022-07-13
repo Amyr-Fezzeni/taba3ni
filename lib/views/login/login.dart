@@ -10,6 +10,7 @@ import 'package:taba3ni/providers/auth_provider.dart';
 import 'package:taba3ni/views/login/signup.dart';
 import 'package:taba3ni/views/login/validator.dart';
 import 'package:taba3ni/widgets/custom_text_field.dart';
+import 'package:taba3ni/widgets/popup.dart';
 import 'package:taba3ni/widgets/primary_btn.dart';
 import 'package:taba3ni/widgets/text_widget.dart';
 import 'package:taba3ni/widgets/transparent_btn.dart';
@@ -96,10 +97,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                     fontWeight: FontWeight.w800,
                                     color: lightBgColor.withOpacity(0.8))),
                         borderRadius: BorderRadius.circular(30),
-                        function: () => context.read<AuthProvider>().login(
-                            context,
-                            emailController.text,
-                            passwordController.text)),
+                        function: () {
+                          if (formkey.currentState!=null && formkey.currentState!.validate()&& emailController.text.isNotEmpty &&passwordController.text.isNotEmpty) {
+                            context.read<AuthProvider>().login(context,
+                                emailController.text, passwordController.text);
+                          }else{
+                               popup(context, "Ok",
+                                title: "Error",
+                                description: "Please enter email and password");
+                          }
+                        }),
                   ),
                 ),
                 SizedBox(
