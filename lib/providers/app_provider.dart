@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taba3ni/constant/style.dart';
-import 'package:taba3ni/services/local_storage_manager.dart';
-
+import 'package:taba3ni/services/shared_data.dart';
 
 class ThemeNotifier with ChangeNotifier {
   Color bgColor = lightBgColor;
@@ -9,6 +8,8 @@ class ThemeNotifier with ChangeNotifier {
   TextStyle title = titleblack;
   bool darkMode = false;
   Color btnColor = lightBlueColor;
+  Color invertedColor = darkBgColor;
+  Color navBarColor = lightnavBarColor;
 
   void changeDarkMode(value) async {
     switch (value) {
@@ -17,33 +18,42 @@ class ThemeNotifier with ChangeNotifier {
         text18 = text18white;
         title = titleWhite;
         btnColor = darkBtnColor;
+        invertedColor = lightBgColor;
+        navBarColor = darknavBarColor;
         break;
       case false:
         bgColor = lightBgColor;
         text18 = text18black;
         title = titleblack;
         btnColor = lightBlueColor;
+        invertedColor = darkBgColor;
+        navBarColor = lightnavBarColor;
         break;
       default:
         break;
     }
     darkMode = value;
     notifyListeners();
-     StorageManager.saveData("darkMode", darkMode);
+    DataPrefrences.setDarkMode(darkMode);
   }
-  initTheme(value){
-      switch (value) {
+
+  initTheme(value) {
+    switch (value) {
       case true:
         bgColor = darkBgColor;
         text18 = text18white;
         title = titleWhite;
         btnColor = darkBtnColor;
+        invertedColor = lightBgColor;
+        navBarColor = darknavBarColor;
         break;
       case false:
         bgColor = lightBgColor;
         text18 = text18black;
         title = titleblack;
         btnColor = lightBlueColor;
+        invertedColor = darkBgColor;
+        navBarColor = lightnavBarColor;
         break;
       default:
         break;
