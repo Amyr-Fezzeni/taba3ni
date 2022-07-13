@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:taba3ni/views/search/widgets/profile_card.dart';
 import 'package:taba3ni/views/search/widgets/search_widget.dart';
 
-import '../../providers/app_provider.dart';
 import '../../providers/data_provider.dart';
 
 class SearchScreen extends StatelessWidget {
