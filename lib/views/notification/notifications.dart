@@ -1,15 +1,21 @@
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:taba3ni/providers/app_provider.dart';
+import 'package:taba3ni/views/notification/widgets/notification_app_bar.dart';
+import 'package:taba3ni/views/notification/widgets/notification_body.dart';
 
-class Notification extends StatelessWidget {
-  const Notification({Key? key}) : super(key: key);
+class NotificationScreen extends StatelessWidget {
+  const NotificationScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: 
-      SizedBox(),);
+      backgroundColor: context.watch<ThemeNotifier>().bgColor,
+      body: SizedBox(
+        child: Column(
+          children: const [NotificationAppBar(), NotificationBody()],
+        ),
+      ),
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/style.dart';
+import 'package:taba3ni/views/notification/notifications.dart';
 import 'package:taba3ni/views/settings/settings.dart';
 
 import '../../../providers/app_provider.dart';
@@ -87,25 +88,28 @@ class ProfileWidget extends StatelessWidget {
                             MaterialPageRoute(
                                 builder: (_) => const SettingsScreen()));
                       },
-                      child: Container(
-                        height: 60,
-                        width: 60,
-                        padding: const EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: style.bgColor,
-                          boxShadow: const [
-                            BoxShadow(
-                                offset: Offset(0, 3),
-                                blurRadius: 10,
-                                color: Colors.black38)
-                          ],
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.settings,
-                            color: style.invertedColor,
-                            size: 30,
+                      child: Hero(
+                        tag: "settings",
+                        child: Container(
+                          height: 60,
+                          width: 60,
+                          padding: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: style.bgColor,
+                            boxShadow: const [
+                              BoxShadow(
+                                  offset: Offset(0, 3),
+                                  blurRadius: 10,
+                                  color: Colors.black38)
+                            ],
+                          ),
+                          child: Center(
+                            child: Icon(
+                              Icons.settings,
+                              color: style.invertedColor,
+                              size: 30,
+                            ),
                           ),
                         ),
                       ),
@@ -113,25 +117,32 @@ class ProfileWidget extends StatelessWidget {
                     InkWell(
                       onTap: () {
                         log("notifications");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const NotificationScreen()));
                       },
-                      child: Container(
-                        height: 60,
-                        width: 60,
-                        padding: const EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: style.bgColor,
-                          boxShadow: const [
-                            BoxShadow(
-                                offset: Offset(0, 3),
-                                blurRadius: 10,
-                                color: Colors.black38)
-                          ],
-                        ),
-                        child: Icon(
-                          Icons.notifications,
-                          color: style.invertedColor,
-                          size: 30,
+                      child: Hero(
+                        tag: "notification",
+                        child: Container(
+                          height: 60,
+                          width: 60,
+                          padding: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: style.bgColor,
+                            boxShadow: const [
+                              BoxShadow(
+                                  offset: Offset(0, 3),
+                                  blurRadius: 10,
+                                  color: Colors.black38)
+                            ],
+                          ),
+                          child: Icon(
+                            Icons.notifications,
+                            color: style.invertedColor,
+                            size: 30,
+                          ),
                         ),
                       ),
                     ),

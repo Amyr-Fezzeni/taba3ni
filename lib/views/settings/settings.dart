@@ -94,25 +94,28 @@ class SettingsScreen extends StatelessWidget {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Container(
-                        padding: const EdgeInsets.only(right: 5),
-                        height: 60,
-                        width: 60,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: style.bgColor,
-                          boxShadow: const [
-                            BoxShadow(
-                                offset: Offset(0, 3),
-                                blurRadius: 10,
-                                color: Colors.black38)
-                          ],
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.arrow_back_ios_rounded,
-                            color: style.invertedColor,
-                            size: 35,
+                      child: Hero(
+                        tag: "settings",
+                        child: Container(
+                          padding: const EdgeInsets.only(right: 5),
+                          height: 60,
+                          width: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: style.bgColor,
+                            boxShadow: const [
+                              BoxShadow(
+                                  offset: Offset(0, 3),
+                                  blurRadius: 10,
+                                  color: Colors.black38)
+                            ],
+                          ),
+                          child: Center(
+                            child: Icon(
+                              Icons.arrow_back_ios_rounded,
+                              color: style.invertedColor,
+                              size: 35,
+                            ),
                           ),
                         ),
                       ),
