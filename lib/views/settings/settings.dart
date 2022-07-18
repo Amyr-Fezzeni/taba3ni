@@ -170,7 +170,7 @@ class SettingsScreen extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                log("change name");
+                context.read<UserProvider>().d();
               },
               child: Container(
                 height: 50,

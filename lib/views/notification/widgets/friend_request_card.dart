@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/models/user.dart';
+import 'package:taba3ni/providers/user_provider.dart';
 import 'package:taba3ni/views/profile/public_profile.dart';
 
 import '../../../providers/app_provider.dart';
@@ -45,7 +44,9 @@ class FrindRequestCard extends StatelessWidget {
             Row(
               children: [
                 InkWell(
-                  onTap: () => log("accept"),
+                  onTap: () => context
+                      .read<UserProvider>()
+                      .addFollow(context, user),
                   child: const Icon(
                     Icons.check,
                     color: Colors.green,
@@ -56,7 +57,10 @@ class FrindRequestCard extends StatelessWidget {
                   width: 10,
                 ),
                 InkWell(
-                  onTap: () => log("decline"),
+                  onTap: () => context.read<UserProvider>().removeRequest(
+                      context,
+                      sender: user,
+                      user: context.read<UserProvider>().currentUser!.id!),
                   child: const Icon(
                     Icons.close_rounded,
                     color: Colors.red,

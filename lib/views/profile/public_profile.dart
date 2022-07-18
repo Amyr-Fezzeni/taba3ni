@@ -201,7 +201,11 @@ class PublicProfileScreen extends StatelessWidget {
                                   : Txt(text: "Requested", style: text18white),
                               function: () => context
                                   .read<UserProvider>()
-                                  .removeRequest(context, user.id!)),
+                                  .removeRequest(context,
+                                      sender: context
+                                          .read<UserProvider>()
+                                          .currentUser!,
+                                      user: user.id!)),
                   !context
                           .watch<UserProvider>()
                           .currentUser!

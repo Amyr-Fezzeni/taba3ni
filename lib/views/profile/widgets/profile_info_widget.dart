@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:taba3ni/providers/user_provider.dart';
 
 import '../../../providers/app_provider.dart';
-import '../../../providers/auth_provider.dart';
 
 class ProfileInfoWidget extends StatelessWidget {
   const ProfileInfoWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final user = context.read<AuthProvider>().currentUser;
+    final user = context.watch<UserProvider>().currentUser;
     var style = context.watch<ThemeNotifier>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),

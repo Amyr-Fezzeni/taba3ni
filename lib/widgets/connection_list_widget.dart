@@ -34,7 +34,7 @@ class ConnectionListWidget extends StatelessWidget {
                   stream: UserService.collection
                       .where("id",
                           whereIn: context
-                              .read<UserProvider>()
+                              .watch<UserProvider>()
                               .currentUser!
                               .followed)
                       .snapshots(),

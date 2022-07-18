@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:custom_marker/marker_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -100,46 +101,43 @@ class UserProvider with ChangeNotifier {
 
   changePhoneNumber(BuildContext context, String phone) {}
 
-  addConnection(BuildContext context, String id) async {
+  addFollow(BuildContext context, UserModel user) async {
     isLoading = true;
     notifyListeners();
-    currentUser!.followed.add(id);
-    final result = await UserService.updateConnection(currentUser!);
-    popup(context, "Ok",
-        description: result ? "Request sent" : "Try again later");
+    await UserService.addFollow(currentUser!, user);
     isLoading = false;
     updateUser();
   }
 
-  removeConnection(BuildContext context, String id) async {
+  removeFollow(BuildContext context, UserModel user) async {
     isLoading = true;
     notifyListeners();
-    currentUser!.followed.remove(id);
-    final result = await UserService.updateConnection(currentUser!);
+    final result = await UserService.removeFollow(currentUser!, user);
     popup(context, "Ok",
         description: result ? "Frind removed" : "Try again later");
     isLoading = false;
     updateUser();
   }
+
   addRequest(BuildContext context, String id) async {
     isLoading = true;
     notifyListeners();
-    final result = await UserService.addRequest(currentUser!,id);
+    final result = await UserService.addRequest(currentUser!, id);
     popup(context, "Ok",
         description: result ? "Request sent" : "Try again later");
     isLoading = false;
     updateUser();
   }
 
-  removeRequest(BuildContext context, String id) async {
+  removeRequest(BuildContext context,
+      {required UserModel sender, required String user}) async {
     isLoading = true;
     notifyListeners();
-    final result = await UserService.removeRequest(currentUser!,id);
-    popup(context, "Ok",
-        description: result ? "Request removed" : "Try again later");
+    await UserService.removeRequest(sender, user);
     isLoading = false;
     updateUser();
   }
+
   addFavorite(BuildContext context, String id) async {
     isLoading = true;
     notifyListeners();
@@ -191,5 +189,15 @@ class UserProvider with ChangeNotifier {
     currentUser =
         await UserService.getUser(currentUser!.email, currentUser!.password);
     notifyListeners();
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> stream = UserService.collection
+      .where("id", isEqualTo: "62c94fec2250c5e3ecf8ff55")
+      .snapshots();
+  d() {
+    stream.listen((event) {}).onData((data) {
+      currentUser = UserModel.fromMap(data.docChanges.first.doc.data()!);
+      notifyListeners();
+    });
   }
 }
