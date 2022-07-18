@@ -184,11 +184,16 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> updateUser() async {
-    await UserService.updateLocation(
-        currentUser!, await UserService.getUserCurrentLocation());
-    currentUser =
-        await UserService.getUser(currentUser!.email, currentUser!.password);
-    notifyListeners();
+    final location = await UserService.getUserCurrentLocation();
+    if (location != null) {
+      await UserService.updateLocation(currentUser!, location);
+      currentUser =
+          await UserService.getUser(currentUser!.email, currentUser!.password);
+      notifyListeners();
+    } else {
+      ///******************************************you can add a popup or return false ************************/
+      // popup(context, confirmText)
+    }
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> stream = UserService.collection

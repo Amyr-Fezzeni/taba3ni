@@ -1,3 +1,6 @@
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +10,7 @@ import 'package:taba3ni/providers/app_provider.dart';
 import 'package:taba3ni/providers/auth_provider.dart';
 import 'package:taba3ni/providers/data_provider.dart';
 import 'package:taba3ni/providers/language.dart';
+import 'package:taba3ni/providers/location_provider.dart';
 import 'package:taba3ni/providers/state_provider.dart';
 import 'package:taba3ni/providers/user_provider.dart';
 import 'package:taba3ni/services/shared_data.dart';
@@ -14,6 +18,12 @@ import 'package:taba3ni/views/login/getstarted.dart';
 import 'package:taba3ni/views/login/login.dart';
 import 'package:taba3ni/views/login/signup.dart';
 import 'package:taba3ni/views/page_structure.dart';
+
+/// The name associated with the UI isolate's [SendPort].
+const String isolateName = 'isolate';
+
+/// A port used to communicate from a background isolate to the UI isolate.
+final ReceivePort port2 = ReceivePort();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +33,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  IsolateNameServer.registerPortWithName(
+    port2.sendPort,
+    isolateName,
+  );
   runApp(
     MultiProvider(
       providers: [
@@ -31,6 +45,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => DataProvider()),
+        ChangeNotifierProvider(create: (_) => LocationProvider()),
         ChangeNotifierProvider(create: (_) => StateProvider())
       ],
       child: const MyApp(),
