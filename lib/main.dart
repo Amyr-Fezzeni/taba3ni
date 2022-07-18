@@ -1,3 +1,6 @@
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +18,11 @@ import 'package:taba3ni/views/login/login.dart';
 import 'package:taba3ni/views/login/signup.dart';
 import 'package:taba3ni/views/page_structure.dart';
 
+/// The name associated with the UI isolate's [SendPort].
+const String isolateName = 'isolate';
+/// A port used to communicate from a background isolate to the UI isolate.
+final ReceivePort port2 = ReceivePort();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
@@ -22,6 +30,10 @@ void main() async {
   await DataPrefrences.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+  IsolateNameServer.registerPortWithName(
+    port2.sendPort,
+    isolateName,
   );
   runApp(
     MultiProvider(

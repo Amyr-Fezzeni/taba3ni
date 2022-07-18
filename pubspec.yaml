@@ -26,7 +26,6 @@ dependencies:
 
   # style & UI
   google_fonts: ^3.0.1
-  google_maps_flutter: ^2.1.6
   flutter_native_splash: any
   flutter_launcher_icons: "^0.9.2"
   flutter_svg: any
@@ -39,7 +38,11 @@ dependencies:
   cloud_firestore: any
   firebase_messaging: any
   firebase_core_platform_interface: 4.4.0
+
+  #location
   geolocator: ^9.0.0
+  google_maps_flutter: ^2.1.6
+  background_locator_2: ^2.0.3
 
 dev_dependencies:
   flutter_test:

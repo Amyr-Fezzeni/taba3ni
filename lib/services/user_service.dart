@@ -271,25 +271,45 @@ class UserService {
         .snapshots();
   }
 
-  static Future<LatLng> getUserCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error("service desactivé");
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.always) {
-        return Future.error("permission");
+  static Future<bool> checkLocationPermission() async {
+    try {
+      bool serviceEnabled;
+      LocationPermission permission;
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        //return Future.error("service desactivé");
+        return false;
       }
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.always) {
+          return true;
+        } else if (permission == LocationPermission.whileInUse) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    } catch (e) {
+      return false;
     }
-    Position pos = await Geolocator.getCurrentPosition();
-    LatLng l = LatLng(pos.latitude, pos.longitude);
-    log(pos.toString());
+  }
 
-    return l;
+  static Future<LatLng?> getUserCurrentLocation() async {
+    try {
+      if (!await checkLocationPermission()) {
+        return null;
+      }
+      Position pos = await Geolocator.getCurrentPosition();
+      LatLng l = LatLng(pos.latitude, pos.longitude);
+      log(pos.toString());
+      return l;
+    } catch (e) {
+       return null;
+    }
   }
 
   static Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>

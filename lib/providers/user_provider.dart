@@ -121,10 +121,11 @@ class UserProvider with ChangeNotifier {
     isLoading = false;
     updateUser();
   }
+
   addRequest(BuildContext context, String id) async {
     isLoading = true;
     notifyListeners();
-    final result = await UserService.addRequest(currentUser!,id);
+    final result = await UserService.addRequest(currentUser!, id);
     popup(context, "Ok",
         description: result ? "Request sent" : "Try again later");
     isLoading = false;
@@ -134,12 +135,13 @@ class UserProvider with ChangeNotifier {
   removeRequest(BuildContext context, String id) async {
     isLoading = true;
     notifyListeners();
-    final result = await UserService.removeRequest(currentUser!,id);
+    final result = await UserService.removeRequest(currentUser!, id);
     popup(context, "Ok",
         description: result ? "Request removed" : "Try again later");
     isLoading = false;
     updateUser();
   }
+
   addFavorite(BuildContext context, String id) async {
     isLoading = true;
     notifyListeners();
@@ -186,10 +188,18 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> updateUser() async {
+    final location = await UserService.getUserCurrentLocation();
+    if(location!=null){
     await UserService.updateLocation(
-        currentUser!, await UserService.getUserCurrentLocation());
+      currentUser!,location
+    );
     currentUser =
         await UserService.getUser(currentUser!.email, currentUser!.password);
     notifyListeners();
+    }else{
+      ///******************************************you can add a popup or return false ************************/
+     // popup(context, confirmText)
+    }
+    
   }
 }
