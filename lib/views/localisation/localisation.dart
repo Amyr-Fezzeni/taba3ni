@@ -3,7 +3,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/style.dart';
 import 'package:taba3ni/models/user.dart';
-import 'package:taba3ni/providers/app_provider.dart';
 import 'package:taba3ni/services/user_service.dart';
 import 'package:taba3ni/widgets/circle_profile_image_widget.dart';
 import '../../providers/user_provider.dart';
@@ -27,7 +26,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    var style = context.watch<ThemeNotifier>();
+    // var style = context.watch<ThemeNotifier>();
 
     return SizedBox(
       child: Stack(

@@ -38,7 +38,7 @@ class DataProvider with ChangeNotifier {
         users.add(UserModel.fromMap(item.data()));
       }
     }
-    print(users);
+    log(users.toString());
     log("data : ${users.length}");
 
     return users;

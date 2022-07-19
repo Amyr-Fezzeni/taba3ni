@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer';
+import 'dart:developer' as d;
 import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui';
@@ -23,7 +23,7 @@ class LocationServiceRepository {
   int _count = -1;
 
   Future<void> init(Map<dynamic, dynamic> params) async {
-    print("***********Init callback handler");
+    d.log("***********Init callback handler");
     if (params.containsKey('countInit')) {
       dynamic tmpCount = params['countInit'];
       if (tmpCount is double) {
@@ -38,22 +38,22 @@ class LocationServiceRepository {
     } else {
       _count = 0;
     }
-    print("$_count");
+    d.log("$_count");
     await setLogLabel("start");
     final SendPort? send = IsolateNameServer.lookupPortByName(isolateName);
     send?.send(null);
   }
 
   Future<void> dispose() async {
-    print("***********Dispose callback handler");
-    print("$_count");
+    d.log("***********Dispose callback handler");
+    d.log("$_count");
     await setLogLabel("end");
     final SendPort? send = IsolateNameServer.lookupPortByName(isolateName);
     send?.send(null);
   }
 
   Future<void> callback(LocationDto locationDto) async {
-    print('$_count location in dart: ${locationDto.toString()}');
+    d.log('$_count location in dart: ${locationDto.toString()}');
     await setLogPosition(_count, locationDto);
     final SendPort? send = IsolateNameServer.lookupPortByName(isolateName);
     send?.send(locationDto);

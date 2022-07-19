@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:taba3ni/constant/style.dart';
 
@@ -48,7 +45,7 @@ class SendAlertWidget extends StatelessWidget {
         //                         FirebaseAuth auth = FirebaseAuth.instance;
 
         //                         String smsCode = _codeController.text.trim();
-                                
+
         //                         var _credential =
         //                             PhoneAuthProvider.credential(
         //                                 verificationId: verificationId,

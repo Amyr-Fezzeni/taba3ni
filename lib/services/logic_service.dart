@@ -13,7 +13,7 @@ int createUniqueId() {
 
 String getLastTimeUpdated(DateTime? time) {
   log("time");
-  print(time);
+  log(time.toString());
   return time != null ? "${time.hour}:${time.minute}" : "now";
 }
 
