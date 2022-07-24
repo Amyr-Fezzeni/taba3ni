@@ -18,7 +18,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.read<AuthProvider>().currentUser;
+    final user = context.watch<UserProvider>().currentUser;
     var style = context.watch<ThemeNotifier>();
     var size = MediaQuery.of(context).size;
     return Scaffold(
@@ -169,9 +169,7 @@ class SettingsScreen extends StatelessWidget {
               height: 20,
             ),
             InkWell(
-              onTap: () {
-                context.read<UserProvider>().d();
-              },
+              onTap: () {},
               child: Container(
                 height: 50,
                 padding: const EdgeInsets.symmetric(horizontal: 10),

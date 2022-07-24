@@ -246,12 +246,12 @@ class UserService {
     }
   }
 
-  static Future<bool> changePhoneNumber(UserModel user) async {
+  static Future<bool> changePhoneNumber(String id, String phoneNumber) async {
     try {
       await FirebaseFirestore.instance
           .collection("users")
-          .doc(user.id)
-          .update({"phoneNumber": user.phoneNumber});
+          .doc(id)
+          .update({"phoneNumber": phoneNumber});
       return true;
     } on Exception {
       return false;
@@ -340,7 +340,7 @@ class UserService {
       log(pos.toString());
       return l;
     } catch (e) {
-       return null;
+      return null;
     }
   }
 
@@ -358,5 +358,14 @@ class UserService {
   static Future<UserModel?> getUserById(String id) async {
     final data = await collection.doc(id).get();
     return UserModel.fromMap(data.data()!);
+  }
+
+  static Future<List<UserModel>> getUsersByIds(List<String> ids) async {
+    List<UserModel> users = [];
+    final data = await collection.where("id", whereIn: ids).get();
+
+    users = data.docs.map((user) => UserModel.fromMap(user.data())).toList();
+
+    return users;
   }
 }

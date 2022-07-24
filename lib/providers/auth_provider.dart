@@ -63,6 +63,7 @@ class AuthProvider with ChangeNotifier {
       await UserService.saveFcm(user);
       log("connected");
       context.read<UserProvider>().setUser(user);
+      context.read<UserProvider>().startUserListen(user.id!);
       isLoading = false;
       notifyListeners();
       Navigator.pushReplacement(
@@ -107,6 +108,7 @@ class AuthProvider with ChangeNotifier {
         DataPrefrences.setLogin(email);
         DataPrefrences.setPassword(password);
         context.read<UserProvider>().setUser(user);
+        context.read<UserProvider>().startUserListen(user.id!);
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (_) => const PageStructure()));
       }
@@ -125,6 +127,7 @@ class AuthProvider with ChangeNotifier {
         currentUser!.location = await UserService.getUserCurrentLocation();
         await UserService.updateLocation(currentUser!, currentUser!.location!);
         context.read<UserProvider>().setUser(currentUser!);
+        context.read<UserProvider>().startUserListen(user.id);
         DataPrefrences.setLogin(currentUser!.email);
         DataPrefrences.setPassword(currentUser!.password);
         await UserService.saveFcm(currentUser!);

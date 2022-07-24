@@ -24,9 +24,7 @@ class ProfileScreen extends StatelessWidget {
             ProfileInfoWidget(),
             ConnectionListWidget(),
             FavoriteListWidget(),
-            SizedBox(
-              height: 40,
-            ),
+            SizedBox(height: 40),
           ],
         )),
       ),

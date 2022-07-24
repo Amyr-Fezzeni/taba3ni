@@ -19,7 +19,7 @@ class UserProvider with ChangeNotifier {
   Set<Marker> markers = {};
 
   setMarker() async {
-    await updateUser();
+    // await updateUser();
     markers = {};
     BitmapDescriptor icon = currentUser!.image.isNotEmpty
         ? await MarkerIcon.downloadResizePictureCircle(currentUser!.image,
@@ -95,18 +95,21 @@ class UserProvider with ChangeNotifier {
   remodeData() {
     currentUser = null;
     markers = {};
+    stopUserListen();
   }
 
   changePassword(BuildContext context, String pass) {}
 
-  changePhoneNumber(BuildContext context, String phone) {}
+  changePhoneNumber(BuildContext context, String phone) async {
+    return await UserService.changePhoneNumber(currentUser!.id!, phone);
+  }
 
   addFollow(BuildContext context, UserModel user) async {
     isLoading = true;
     notifyListeners();
     await UserService.addFollow(currentUser!, user);
     isLoading = false;
-    updateUser();
+    // updateUser();
   }
 
   removeFollow(BuildContext context, UserModel user) async {
@@ -116,7 +119,7 @@ class UserProvider with ChangeNotifier {
     popup(context, "Ok",
         description: result ? "Frind removed" : "Try again later");
     isLoading = false;
-    updateUser();
+    // updateUser();
   }
 
   addRequest(BuildContext context, String id) async {
@@ -126,7 +129,7 @@ class UserProvider with ChangeNotifier {
     popup(context, "Ok",
         description: result ? "Request sent" : "Try again later");
     isLoading = false;
-    updateUser();
+    // updateUser();
   }
 
   removeRequest(BuildContext context,
@@ -135,30 +138,33 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
     await UserService.removeRequest(sender, user);
     isLoading = false;
-    updateUser();
+    // updateUser();
   }
 
-  addFavorite(BuildContext context, String id) async {
+  addFavorite(BuildContext context, UserModel user) async {
     isLoading = true;
     notifyListeners();
-    currentUser!.followed.add(id);
+    currentUser!.sharedLocation.add(user.id!);
     final result = await UserService.updateFavorite(currentUser!);
     popup(context, "Ok",
-        description:
-            result ? "Now you both share locations" : "Try again later");
+        description: result
+            ? "location shared with ${user.fullName}"
+            : "Try again later");
     isLoading = false;
-    updateUser();
+    // updateUser();
   }
 
-  removeFavorite(BuildContext context, String id) async {
+  removeFavorite(BuildContext context, UserModel user) async {
     isLoading = true;
     notifyListeners();
-    currentUser!.followed.remove(id);
+    currentUser!.sharedLocation.remove(user.id!);
     final result = await UserService.updateFavorite(currentUser!);
     popup(context, "Ok",
-        description: result ? "Location desactivated" : "Try again later");
+        description: result
+            ? "Location desactivated with ${user.fullName}"
+            : "Try again later");
     isLoading = false;
-    updateUser();
+    // updateUser();
   }
 
   addBlock(BuildContext context, String id) async {
@@ -169,7 +175,7 @@ class UserProvider with ChangeNotifier {
     popup(context, "Ok",
         description: result ? "User Blocked" : "Try again later");
     isLoadingSecond = false;
-    updateUser();
+    // updateUser();
   }
 
   removeBlock(BuildContext context, String id) async {
@@ -180,29 +186,41 @@ class UserProvider with ChangeNotifier {
     popup(context, "Ok",
         description: result ? "User Unblocked" : "Try again later");
     isLoadingSecond = false;
-    updateUser();
+    // updateUser();
   }
 
-  Future<void> updateUser() async {
-    final location = await UserService.getUserCurrentLocation();
-    if (location != null) {
-      await UserService.updateLocation(currentUser!, location);
-      currentUser =
-          await UserService.getUser(currentUser!.email, currentUser!.password);
-      notifyListeners();
-    } else {
-      ///******************************************you can add a popup or return false ************************/
-      // popup(context, confirmText)
-    }
-  }
+  // Future<void> updateUser() async {
+  //   final location = await UserService.getUserCurrentLocation();
+  //   if (location != null) {
+  //     await UserService.updateLocation(currentUser!, location);
+  //     currentUser =
+  //         await UserService.getUser(currentUser!.email, currentUser!.password);
+  //     notifyListeners();
+  //   } else {
+  //     ///******************************************you can add a popup or return false ************************/
+  //     // popup(context, confirmText)
+  //   }
+  // }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> stream = UserService.collection
-      .where("id", isEqualTo: "62c94fec2250c5e3ecf8ff55")
-      .snapshots();
-  d() {
-    stream.listen((event) {}).onData((data) {
+  Stream<QuerySnapshot<Map<String, dynamic>>>? userStream;
+
+  startUserListen(String userId) {
+    if (userStream != null) return;
+    userStream =
+        UserService.collection.where("id", isEqualTo: userId).snapshots();
+    userStream?.listen((event) {}).onData((data) {
+      for (var d in data.docChanges) {
+        log(d.doc.data().toString());
+      }
       currentUser = UserModel.fromMap(data.docChanges.first.doc.data()!);
+      log("user updated");
       notifyListeners();
     });
+  }
+
+  stopUserListen() {
+    if (userStream == null) return;
+    userStream?.listen((event) {}).cancel();
+    userStream = null;
   }
 }

@@ -3,18 +3,18 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taba3ni/constant/style.dart';
+import 'package:taba3ni/providers/user_provider.dart';
 import 'package:taba3ni/views/notification/notifications.dart';
 import 'package:taba3ni/views/settings/settings.dart';
 
 import '../../../providers/app_provider.dart';
-import '../../../providers/auth_provider.dart';
 
 class ProfileWidget extends StatelessWidget {
   const ProfileWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final user = context.read<AuthProvider>().currentUser;
+    final user = context.read<UserProvider>().currentUser;
     var style = context.watch<ThemeNotifier>();
     var size = MediaQuery.of(context).size;
     return SizedBox(

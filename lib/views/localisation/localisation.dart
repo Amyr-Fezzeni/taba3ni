@@ -46,17 +46,19 @@ class _TrackingScreenState extends State<TrackingScreen> {
             ),
           ),
           context.watch<UserProvider>().currentUser!.followed.isEmpty
-              ? const SizedBox()
+              ? SizedBox(
+                  child: mapUserIcon(
+                      user: context.read<UserProvider>().currentUser!,
+                      context: context),
+                )
               : Positioned(
                   left: size.width * 0.05,
                   bottom: 90,
                   child: StreamBuilder(
                     stream: UserService.collection
-                        .where("id",
-                            whereIn: context
-                                .read<UserProvider>()
-                                .currentUser!
-                                .followed)
+                        .where("sharedLocation",
+                            arrayContains:
+                                context.read<UserProvider>().currentUser!.id)
                         .snapshots(),
                     builder: (context, AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.connectionState == ConnectionState.active) {
@@ -92,7 +94,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
     return InkWell(
       onTap: () => context.read<UserProvider>().locateUser(user),
       child: CircleProfileImage(
-        size: 35,
+        size: 70,
         isAsset: false,
         img: user.image.isNotEmpty ? user.image : "",
       ),
